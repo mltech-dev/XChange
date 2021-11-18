@@ -190,6 +190,7 @@
 
     <module>xchange-stream-bankera</module>
     <module>xchange-stream-binance</module>
+	<module>xchange-stream-binance-futures</module>
     <module>xchange-stream-bitfinex</module>
     <module>xchange-stream-bitflyer</module>
     <module>xchange-stream-bitmex</module>
