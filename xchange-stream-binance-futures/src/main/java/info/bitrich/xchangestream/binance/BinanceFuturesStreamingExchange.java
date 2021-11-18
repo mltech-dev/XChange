@@ -1,5 +1,18 @@
 package info.bitrich.xchangestream.binance;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import org.knowm.xchange.binance.BinanceAuthenticated;
+import org.knowm.xchange.binance.BinanceFuturesExchange;
+import org.knowm.xchange.binance.service.BinanceMarketDataService;
+import org.knowm.xchange.client.ExchangeRestProxyBuilder;
+import org.knowm.xchange.currency.CurrencyPair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import info.bitrich.xchangestream.binance.BinanceUserDataChannel.NoActiveChannelException;
 import info.bitrich.xchangestream.core.ProductSubscription;
 import info.bitrich.xchangestream.core.StreamingExchange;
@@ -7,23 +20,12 @@ import info.bitrich.xchangestream.service.netty.ConnectionStateModel.State;
 import info.bitrich.xchangestream.util.Events;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import org.knowm.xchange.binance.BinanceAuthenticated;
-import org.knowm.xchange.binance.BinanceExchange;
-import org.knowm.xchange.binance.service.BinanceMarketDataService;
-import org.knowm.xchange.client.ExchangeRestProxyBuilder;
-import org.knowm.xchange.currency.CurrencyPair;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class BinanceStreamingExchange extends BinanceExchange implements StreamingExchange {
+public class BinanceFuturesStreamingExchange extends BinanceFuturesExchange implements StreamingExchange {
 
-  private static final Logger LOG = LoggerFactory.getLogger(BinanceStreamingExchange.class);
-  private static final String WS_API_BASE_URI = "wss://stream.binance.com:9443/";
-  private static final String WS_SANDBOX_API_BASE_URI = "wss://testnet.binance.vision/";
+  private static final Logger LOG = LoggerFactory.getLogger(BinanceFuturesStreamingExchange.class);
+  private static final String WS_API_BASE_URI = "wss://fstream.binance.com/";
+  private static final String WS_SANDBOX_API_BASE_URI = "wss://stream.binancefuture.com/";
   protected static final String USE_HIGHER_UPDATE_FREQUENCY =
       "Binance_Orderbook_Use_Higher_Frequency";
   protected static final String USE_REALTIME_BOOK_TICKER = "Binance_Ticker_Use_Realtime";
