@@ -3,18 +3,21 @@ package org.knowm.xchange.binance.service;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.knowm.xchange.binance.BinanceAdapters;
 import org.knowm.xchange.binance.BinanceAuthenticated;
 import org.knowm.xchange.binance.BinanceErrorAdapter;
 import org.knowm.xchange.binance.BinanceFuturesExchange;
 import org.knowm.xchange.binance.dto.BinanceException;
 import org.knowm.xchange.binance.dto.account.AssetDetail;
 import org.knowm.xchange.binance.dto.account.BinanceAccountInformation;
+import org.knowm.xchange.binance.dto.meta.exchangeinfo.Symbol;
 import org.knowm.xchange.client.ResilienceRegistries;
 import org.knowm.xchange.currency.Currency;
 import org.knowm.xchange.currency.CurrencyPair;
@@ -22,7 +25,10 @@ import org.knowm.xchange.dto.account.AccountInfo;
 import org.knowm.xchange.dto.account.AddressWithTag;
 import org.knowm.xchange.dto.account.Balance;
 import org.knowm.xchange.dto.account.Fee;
+import org.knowm.xchange.dto.account.OpenPosition;
+import org.knowm.xchange.dto.account.OpenPosition.Type;
 import org.knowm.xchange.dto.account.Wallet;
+import org.knowm.xchange.instrument.Instrument;
 import org.knowm.xchange.service.account.AccountService;
 import org.knowm.xchange.service.trade.params.DefaultWithdrawFundsParams;
 import org.knowm.xchange.service.trade.params.TradeHistoryParams;
@@ -93,7 +99,10 @@ public class BinanceAccountService extends BinanceAccountServiceRaw implements A
           acc.getAssets().stream()
               .map(b -> new Balance(b.getCurrency(), b.getWalletBalance(), b.getAvailableBalance()))
               .collect(Collectors.toList());
-      return new AccountInfo(new Date(acc.getUpdateTime()), Wallet.Builder.from(balances).build());
+      List<OpenPosition> openPositions = 
+    	  acc.getPositions().stream()
+    	  	.map(p -> new OpenPosition(BinanceAdapters.adaptSymbol(p.getSymbol()), Type.valueOf(p.getPositionSide().name()), p.getPositionAmt(), p.getEntryPrice())).collect(Collectors.toList());
+      return new AccountInfo(null,null,Arrays.asList(Wallet.Builder.from(balances).build()),openPositions, new Date(acc.getUpdateTime()));
     } catch (BinanceException e) {
       throw BinanceErrorAdapter.adapt(e);
     }
