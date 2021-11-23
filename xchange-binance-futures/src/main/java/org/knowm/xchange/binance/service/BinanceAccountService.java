@@ -90,10 +90,10 @@ public class BinanceAccountService extends BinanceAccountServiceRaw implements A
     try {
       BinanceAccountInformation acc = account();
       List<Balance> balances =
-          acc.balances.stream()
-              .map(b -> new Balance(b.getCurrency(), b.getTotal(), b.getAvailable()))
+          acc.getAssets().stream()
+              .map(b -> new Balance(b.getCurrency(), b.getWalletBalance(), b.getAvailableBalance()))
               .collect(Collectors.toList());
-      return new AccountInfo(new Date(acc.updateTime), Wallet.Builder.from(balances).build());
+      return new AccountInfo(new Date(acc.getUpdateTime()), Wallet.Builder.from(balances).build());
     } catch (BinanceException e) {
       throw BinanceErrorAdapter.adapt(e);
     }
@@ -102,11 +102,15 @@ public class BinanceAccountService extends BinanceAccountServiceRaw implements A
   @Override
   public Map<CurrencyPair, Fee> getDynamicTradingFees() throws IOException {
     try {
-      BinanceAccountInformation acc = account();
-      BigDecimal makerFee =
-          acc.makerCommission.divide(new BigDecimal("10000"), 4, RoundingMode.UNNECESSARY);
-      BigDecimal takerFee =
-          acc.takerCommission.divide(new BigDecimal("10000"), 4, RoundingMode.UNNECESSARY);
+//      BinanceAccountInformation acc = account();
+////      BigDecimal makerFee =
+//          acc.makerCommission.divide(new BigDecimal("10000"), 4, RoundingMode.UNNECESSARY);
+//      BigDecimal takerFee =
+//          acc.takerCommission.divide(new BigDecimal("10000"), 4, RoundingMode.UNNECESSARY);
+
+      //TODO: retrive commision rate for all symboals and then add it in traddingfees map.
+      BigDecimal makerFee = BigDecimal.ZERO;
+      BigDecimal takerFee = BigDecimal.ZERO;
 
       Map<CurrencyPair, Fee> tradingFees = new HashMap<>();
       List<CurrencyPair> pairs = exchange.getExchangeSymbols();

@@ -177,7 +177,7 @@ public interface BinanceAuthenticated extends Binance {
       throws IOException, BinanceException;
 
   @GET
-  @Path("fapi/v1/allOrders")
+  @Path("/fapi/v1/allOrders")
   /**
    * Get all account orders; active, canceled, or filled. <br>
    * If orderId is set, it will get orders >= that orderId. Otherwise most recent orders are
@@ -207,7 +207,7 @@ public interface BinanceAuthenticated extends Binance {
       throws IOException, BinanceException;
 
   @GET
-  @Path("fapi/v2/account")
+  @Path("/fapi/v2/account")
   /**
    * Get current account information.
    *
@@ -225,7 +225,7 @@ public interface BinanceAuthenticated extends Binance {
       throws IOException, BinanceException;
 
   @GET
-  @Path("fapi/v1/userTrades")
+  @Path("/fapi/v1/userTrades")
   /**
    * Get trades for a specific account and symbol.
    *
