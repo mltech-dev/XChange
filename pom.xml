@@ -90,7 +90,8 @@
   </scm>
 
   <modules>
-    <module>xchange-bankera</module>
+    <module>xchange-core</module>
+	<module>xchange-bankera</module>
     <module>xchange-bibox</module>
     <module>xchange-binance</module>
 	<module>xchange-binance-futures</module>
@@ -134,7 +135,6 @@
     <module>xchange-coingi</module>
     <module>xchange-coinmarketcap</module>
     <module>xchange-coinmate</module>
-    <module>xchange-core</module>
     <module>xchange-cryptofacilities</module>
     <module>xchange-cryptopia</module>
     <module>xchange-coinsuper</module>
@@ -189,6 +189,7 @@
     <module>xchange-enigma</module>
 
 
+    <module>xchange-stream-core</module>
     <module>xchange-stream-bankera</module>
     <module>xchange-stream-binance</module>
 	<module>xchange-stream-binance-futures</module>
@@ -201,7 +202,6 @@
     <module>xchange-stream-coinbasepro</module>
     <module>xchange-stream-coinjar</module>
     <module>xchange-stream-coinmate</module>
-    <module>xchange-stream-core</module>
     <module>xchange-stream-dydx</module>
     <module>xchange-stream-ftx</module>
     <module>xchange-stream-gateio</module>

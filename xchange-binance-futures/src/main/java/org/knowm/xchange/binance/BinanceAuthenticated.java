@@ -40,7 +40,7 @@ public interface BinanceAuthenticated extends Binance {
   String X_MBX_APIKEY = "X-MBX-APIKEY";
 
   @POST
-  @Path("fapi/v1/order")
+  @Path("/v1/order")
   /**
    * Send in a new order
    *
@@ -82,7 +82,7 @@ public interface BinanceAuthenticated extends Binance {
       throws IOException, BinanceException;
 
   @GET
-  @Path("fapi/v1/order")
+  @Path("/v1/order")
   /**
    * Check an order's status.<br>
    * Either orderId or origClientOrderId must be sent.
@@ -109,7 +109,7 @@ public interface BinanceAuthenticated extends Binance {
       throws IOException, BinanceException;
 
   @DELETE
-  @Path("fapi/v1/order")
+  @Path("/v1/order")
   /**
    * Cancel an active order.
    *
@@ -137,7 +137,7 @@ public interface BinanceAuthenticated extends Binance {
       throws IOException, BinanceException;
 
   @DELETE
-  @Path("fapi/v1/allOpenOrders")
+  @Path("/v1/allOpenOrders")
   /**
    * Cancels all active orders on a symbol. This includes OCO orders.
    *
@@ -157,7 +157,7 @@ public interface BinanceAuthenticated extends Binance {
       throws IOException, BinanceException;
 
   @GET
-  @Path("/fapi/v1/openOrders")
+  @Path("/v1/openOrders")
   /**
    * Get open orders on a symbol.
    *
@@ -177,7 +177,7 @@ public interface BinanceAuthenticated extends Binance {
       throws IOException, BinanceException;
 
   @GET
-  @Path("/fapi/v1/allOrders")
+  @Path("/v1/allOrders")
   /**
    * Get all account orders; active, canceled, or filled. <br>
    * If orderId is set, it will get orders >= that orderId. Otherwise most recent orders are
@@ -207,7 +207,7 @@ public interface BinanceAuthenticated extends Binance {
       throws IOException, BinanceException;
 
   @GET
-  @Path("/fapi/v2/account")
+  @Path("/{apiVersion}/account")
   /**
    * Get current account information.
    *
@@ -218,6 +218,7 @@ public interface BinanceAuthenticated extends Binance {
    * @throws BinanceException
    */
   BinanceAccountInformation account(
+	  @PathParam("apiVersion") String apiVersion,
       @QueryParam("recvWindow") Long recvWindow,
       @QueryParam("timestamp") SynchronizedValueFactory<Long> timestamp,
       @HeaderParam(X_MBX_APIKEY) String apiKey,
@@ -225,7 +226,7 @@ public interface BinanceAuthenticated extends Binance {
       throws IOException, BinanceException;
 
   @GET
-  @Path("/fapi/v1/userTrades")
+  @Path("/v1/userTrades")
   /**
    * Get trades for a specific account and symbol.
    *
@@ -441,7 +442,7 @@ public interface BinanceAuthenticated extends Binance {
    * @throws IOException
    */
   @POST
-  @Path("fapi/v1/listenKey")
+  @Path("/v1/listenKey")
   BinanceListenKey startUserDataStream(@HeaderParam(X_MBX_APIKEY) String apiKey)
       throws IOException, BinanceException;
 
@@ -455,7 +456,7 @@ public interface BinanceAuthenticated extends Binance {
    * @throws IOException
    */
   @PUT
-  @Path("fapi/v1/listenKey?listenKey={listenKey}")
+  @Path("/v1/listenKey?listenKey={listenKey}")
   Map<?, ?> keepAliveUserDataStream(
       @HeaderParam(X_MBX_APIKEY) String apiKey, @PathParam("listenKey") String listenKey)
       throws IOException, BinanceException;
@@ -470,7 +471,7 @@ public interface BinanceAuthenticated extends Binance {
    * @throws IOException
    */
   @DELETE
-  @Path("fapi/v1/listenKey?listenKey={listenKey}")
+  @Path("/v1/listenKey?listenKey={listenKey}")
   Map<?, ?> closeUserDataStream(
       @HeaderParam(X_MBX_APIKEY) String apiKey, @PathParam("listenKey") String listenKey)
       throws IOException, BinanceException;
