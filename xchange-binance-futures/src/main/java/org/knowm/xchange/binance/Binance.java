@@ -31,7 +31,7 @@ public interface Binance {
   BinanceSystemStatus systemStatus() throws IOException;
 
   @GET
-  @Path("fapi/v1/ping")
+  @Path("v1/ping")
   /**
    * Test connectivity to the Rest API.
    *
@@ -41,7 +41,7 @@ public interface Binance {
   Object ping() throws IOException;
 
   @GET
-  @Path("fapi/v1/time")
+  @Path("v1/time")
   /**
    * Test connectivity to the Rest API and get the current server time.
    *
@@ -51,7 +51,7 @@ public interface Binance {
   BinanceTime time() throws IOException;
 
   @GET
-  @Path("fapi/v1/exchangeInfo")
+  @Path("v1/exchangeInfo")
   /**
    * Current exchange trading rules and symbol information.
    *
@@ -61,7 +61,7 @@ public interface Binance {
   BinanceExchangeInfo exchangeInfo() throws IOException;
 
   @GET
-  @Path("fapi/v1/depth")
+  @Path("v1/depth")
   /**
    * @param symbol
    * @param limit optional, default 100 max 5000. Valid limits: [5, 10, 20, 50, 100, 500, 1000,
@@ -74,7 +74,7 @@ public interface Binance {
       throws IOException, BinanceException;
 
   @GET
-  @Path("fapi/v1/aggTrades")
+  @Path("v1/aggTrades")
   /**
    * Get compressed, aggregate trades. Trades that fill at the time, from the same order, with the
    * same price will have the quantity aggregated.<br>
@@ -101,7 +101,7 @@ public interface Binance {
       throws IOException, BinanceException;
 
   @GET
-  @Path("fapi/v1/klines")
+  @Path("v1/klines")
   /**
    * Kline/candlestick bars for a symbol. Klines are uniquely identified by their open time.<br>
    * If startTime and endTime are not sent, the most recent klines are returned.
@@ -124,7 +124,7 @@ public interface Binance {
       throws IOException, BinanceException;
 
   @GET
-  @Path("fapi/v1/ticker/24hr")
+  @Path("v1/ticker/24hr")
   /**
    * 24 hour price change statistics for all symbols. - bee carreful this api call have a big
    * weight, only about 4 call per minut can be without ban.
@@ -136,7 +136,7 @@ public interface Binance {
   List<BinanceTicker24h> ticker24h() throws IOException, BinanceException;
 
   @GET
-  @Path("fapi/v1/ticker/24hr")
+  @Path("v1/ticker/24hr")
   /**
    * 24 hour price change statistics.
    *
@@ -149,7 +149,7 @@ public interface Binance {
       throws IOException, BinanceException;
 
   @GET
-  @Path("fapi/v1/ticker/price")
+  @Path("v1/ticker/price")
   /**
    * Latest price for a symbol.
    *
@@ -161,7 +161,7 @@ public interface Binance {
       throws IOException, BinanceException;
 
   @GET
-  @Path("fapi/v1/ticker/price")
+  @Path("v1/ticker/price")
   /**
    * Latest price for all symbols.
    *
@@ -172,7 +172,7 @@ public interface Binance {
   List<BinancePrice> tickerAllPrices() throws IOException, BinanceException;
 
   @GET
-  @Path("fapi/v1/ticker/bookTicker")
+  @Path("v1/ticker/bookTicker")
   /**
    * Best price/qty on the order book for all symbols.
    *
