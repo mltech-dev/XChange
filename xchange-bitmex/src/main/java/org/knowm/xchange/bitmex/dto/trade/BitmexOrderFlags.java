@@ -11,6 +11,8 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import lombok.Value;
 import org.knowm.xchange.dto.Order.IOrderFlags;
 
 public enum BitmexOrderFlags implements IOrderFlags {
@@ -52,5 +54,20 @@ public enum BitmexOrderFlags implements IOrderFlags {
       }
       return orderFlags;
     }
+  }
+
+  public interface BinanceOrderFlags extends IOrderFlags {
+
+    static BinanceOrderFlags withClientId(String clientId) {
+      return new ClientIdFlag(clientId);
+    }
+
+    /** Used in fields 'newClientOrderId' */
+    String getClientId();
+  }
+
+  @Value
+  static final class ClientIdFlag implements BinanceOrderFlags {
+    private final String clientId;
   }
 }

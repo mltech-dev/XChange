@@ -120,10 +120,8 @@ public class BinanceFuturesStreamingExchange extends BinanceFuturesExchange impl
   }
 
   private Completable createAndConnectUserDataService(String listenKey) {
-	String path =
-		        Boolean.TRUE.equals(exchangeSpecification.getExchangeSpecificParametersItem(USE_SANDBOX))
-		            ? WS_SANDBOX_API_BASE_URI
-		            : WS_API_BASE_URI;
+	String path = getWebsocketURI();
+		        
     userDataStreamingService = BinanceUserDataStreamingService.create(path,listenKey);
     return userDataStreamingService
         .connect()
@@ -201,11 +199,21 @@ public class BinanceFuturesStreamingExchange extends BinanceFuturesExchange impl
     return streamingTradeService;
   }
 
+  private String getWebsocketURI() {
+	  String path="";
+	  if(exchangeSpecification.getOverrideWebsocketApiUri()!=null) {
+		  path = exchangeSpecification.getOverrideWebsocketApiUri();
+	  }
+	  else {
+		  path = Boolean.TRUE.equals(exchangeSpecification.getExchangeSpecificParametersItem(USE_SANDBOX))
+				  ? WS_SANDBOX_API_BASE_URI
+						  : WS_API_BASE_URI;
+	  }
+	  return path;
+  }
+  
   protected BinanceStreamingService createStreamingService(ProductSubscription subscription) {
-    String path =
-        Boolean.TRUE.equals(exchangeSpecification.getExchangeSpecificParametersItem(USE_SANDBOX))
-            ? WS_SANDBOX_API_BASE_URI
-            : WS_API_BASE_URI;
+    String path = getWebsocketURI();
     path += "stream?streams=" + buildSubscriptionStreams(subscription);
     return new BinanceStreamingService(path, subscription);
   }

@@ -9,6 +9,7 @@ import org.knowm.xchange.binance.BinanceFuturesExchange;
 import org.knowm.xchange.binance.dto.BinanceException;
 import org.knowm.xchange.binance.dto.account.BinanceAccountInformation;
 import org.knowm.xchange.client.ResilienceRegistries;
+import org.knowm.xchange.utils.Assert;
 
 public class BinanceAccountServiceRaw extends BinanceBaseService {
 
@@ -20,8 +21,10 @@ public class BinanceAccountServiceRaw extends BinanceBaseService {
   }
 
   public BinanceAccountInformation account() throws BinanceException, IOException {
+	String accountApiVersion = exchange.getExchangeSpecification().getExchangeSpecificParameters().containsKey("account-api-version")?exchange.getExchangeSpecification().getExchangeSpecificParameters().get("account-api-version").toString():null;
+	Assert.notNull(accountApiVersion, "Account API version property (account-api-version) is mandatory");
     return decorateApiCall(
-            () -> binance.account(getRecvWindow(), getTimestampFactory(), apiKey, signatureCreator))
+            () -> binance.account(accountApiVersion, getRecvWindow(), getTimestampFactory(), apiKey, signatureCreator))
         .withRetry(retry("account"))
         .withRateLimiter(rateLimiter(REQUEST_WEIGHT_RATE_LIMITER), 5)
         .call();
