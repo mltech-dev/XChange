@@ -63,13 +63,13 @@ public class TradeServiceResilienceTest extends AbstractResilienceTest {
 
   private void stubForOpenOrdersWithFirstCallTimetoutAndSecondSuccessful() {
     stubFor(
-        get(urlPathEqualTo("/api/v3/openOrders"))
+        get(urlPathEqualTo("/fapi/v1/openOrders"))
             .inScenario("Retry read")
             .whenScenarioStateIs(STARTED)
             .willReturn(aResponse().withFixedDelay(READ_TIMEOUT_MS * 2).withStatus(500))
             .willSetStateTo("After fail"));
     stubFor(
-        get(urlPathEqualTo("/api/v3/openOrders"))
+        get(urlPathEqualTo("/fapi/v1/openOrders"))
             .inScenario("Retry read")
             .whenScenarioStateIs("After fail")
             .willReturn(

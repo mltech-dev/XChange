@@ -15,6 +15,7 @@ public class HuobiStreamingExchange extends HuobiExchange implements StreamingEx
 
   private HuobiStreamingService streamingService;
   private HuobiStreamingMarketDataService streamingMarketDataService;
+  private HuobiStreamingTradeService huobiStreamingTradeService;
 
   @Override
   protected void initServices() {
@@ -26,12 +27,17 @@ public class HuobiStreamingExchange extends HuobiExchange implements StreamingEx
                 .getOrDefault("AWS", Boolean.FALSE);
     this.streamingService = new HuobiStreamingService(aws ? API_URI_AWS : API_BASE_URI);
     this.streamingService.useCompressedMessages(true);
-    streamingMarketDataService = new HuobiStreamingMarketDataService(streamingService);
+    this.streamingMarketDataService = new HuobiStreamingMarketDataService(streamingService);
   }
 
   @Override
   public Completable connect(ProductSubscription... args) {
+    Boolean aws = (Boolean) getExchangeSpecification().getExchangeSpecificParameters().getOrDefault("AWS", Boolean.FALSE);
+
+    HuobiUserDataStreamingService huobiUserDataStreamingService= new HuobiUserDataStreamingService(aws ? API_URI_AWS : API_BASE_URI);
+    huobiStreamingTradeService = new HuobiStreamingTradeService(huobiUserDataStreamingService);
     return streamingService.connect();
+
   }
 
   @Override
@@ -62,6 +68,11 @@ public class HuobiStreamingExchange extends HuobiExchange implements StreamingEx
   @Override
   public StreamingMarketDataService getStreamingMarketDataService() {
     return streamingMarketDataService;
+  }
+
+  @Override
+  public HuobiStreamingTradeService getStreamingTradeService() {
+    return huobiStreamingTradeService;
   }
 
   @Override

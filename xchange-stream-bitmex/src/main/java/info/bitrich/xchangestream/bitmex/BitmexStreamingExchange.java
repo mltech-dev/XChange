@@ -8,6 +8,7 @@ import io.reactivex.Completable;
 import io.reactivex.Observable;
 import org.knowm.xchange.ExchangeSpecification;
 import org.knowm.xchange.bitmex.BitmexExchange;
+import org.knowm.xchange.bitmex.service.BitmexTradeService;
 
 /** Created by Lukas Zaoralek on 12.11.17. */
 public class BitmexStreamingExchange extends BitmexExchange implements StreamingExchange {
@@ -16,6 +17,7 @@ public class BitmexStreamingExchange extends BitmexExchange implements Streaming
 
   private BitmexStreamingService streamingService;
   private BitmexStreamingMarketDataService streamingMarketDataService;
+  private BitmexStreamingTradeService bitmexStreamingTradeService;
 
   public BitmexStreamingExchange() {}
 
@@ -24,6 +26,7 @@ public class BitmexStreamingExchange extends BitmexExchange implements Streaming
     super.initServices();
     streamingService = createStreamingService();
     streamingMarketDataService = new BitmexStreamingMarketDataService(streamingService, this);
+    bitmexStreamingTradeService = new BitmexStreamingTradeService(streamingService);
   }
 
   @Override
@@ -81,6 +84,11 @@ public class BitmexStreamingExchange extends BitmexExchange implements Streaming
   @Override
   public void useCompressedMessages(boolean compressedMessages) {
     streamingService.useCompressedMessages(compressedMessages);
+  }
+
+  @Override
+  public BitmexStreamingTradeService getStreamingTradeService() {
+    return bitmexStreamingTradeService;
   }
 
   @Override
