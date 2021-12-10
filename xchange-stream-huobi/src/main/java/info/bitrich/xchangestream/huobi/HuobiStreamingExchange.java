@@ -27,8 +27,7 @@ public class HuobiStreamingExchange extends HuobiExchange implements StreamingEx
                 .getOrDefault("AWS", Boolean.FALSE);
     this.streamingService = new HuobiStreamingService(aws ? API_URI_AWS : API_BASE_URI);
     this.streamingService.useCompressedMessages(true);
-    streamingMarketDataService = new HuobiStreamingMarketDataService(streamingService);
-//    huobiStreamingTradeService = streamingService
+    this.streamingMarketDataService = new HuobiStreamingMarketDataService(streamingService);
   }
 
   @Override
