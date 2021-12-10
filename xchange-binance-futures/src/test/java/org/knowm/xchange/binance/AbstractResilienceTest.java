@@ -35,7 +35,7 @@ public class AbstractResilienceTest {
             ExchangeFactory.INSTANCE.createExchangeWithoutSpecification(BinanceFuturesExchange.class);
     ExchangeSpecification specification = exchange.getDefaultExchangeSpecification();
     specification.setHost("localhost");
-    specification.setSslUri("http://localhost:" + wireMockRule.port() + "/");
+    specification.setSslUri("http://localhost:" + wireMockRule.port() + "/fapi");
     specification.setPort(wireMockRule.port());
     specification.setShouldLoadRemoteMetaData(false);
     specification.setHttpReadTimeout(READ_TIMEOUT_MS);
