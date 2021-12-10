@@ -7,17 +7,19 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import java.io.IOException;
 import java.math.BigDecimal;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.ExchangeSpecification;
 import org.knowm.xchange.binance.BinanceFuturesExchange;
 import org.knowm.xchange.currency.Currency;
-import org.knowm.xchange.exceptions.ExchangeSecurityException;
+import org.knowm.xchange.exceptions.NotYetImplementedForExchangeException;
 import org.knowm.xchange.service.account.AccountService;
+
+import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
 public class AccountServiceTest {
 
@@ -25,16 +27,18 @@ public class AccountServiceTest {
 
   @Test(timeout = 2000)
   public void withdrawSuccess() throws Exception {
-    String response = withdraw("withdraw-200.json", 200);
-    assertThat(response).isEqualTo("9c7662xxxxxxxxxc8bd");
+	  Throwable exception = catchThrowable(() -> withdraw("withdraw-400.json", 400));
+	    assertThat(exception)
+	        .isInstanceOf(NotYetImplementedForExchangeException.class)
+	        .hasMessage("withdrawFunds");
   }
 
   @Test(timeout = 2000)
   public void withdrawFailure() {
     Throwable exception = catchThrowable(() -> withdraw("withdraw-400.json", 400));
     assertThat(exception)
-        .isInstanceOf(ExchangeSecurityException.class)
-        .hasMessage("error message (HTTP status code: 400)");
+        .isInstanceOf(NotYetImplementedForExchangeException.class)
+        .hasMessage("withdrawFunds");
   }
 
   private String withdraw(String responseFileName, int statusCode) throws IOException {

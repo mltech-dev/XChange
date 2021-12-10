@@ -22,7 +22,7 @@ import org.knowm.xchange.binance.dto.meta.exchangeinfo.BinanceExchangeInfo;
 public interface Binance {
 
   @GET
-  @Path("sapi/v1/system/status")
+  @Path("v1/system/status")
   /**
    * Fetch system status which is normal or system maintenance.
    *
