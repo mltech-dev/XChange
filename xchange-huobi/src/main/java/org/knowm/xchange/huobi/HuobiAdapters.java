@@ -29,6 +29,7 @@ import org.knowm.xchange.huobi.dto.account.HuobiBalanceSum;
 import org.knowm.xchange.huobi.dto.account.HuobiFundingRecord;
 import org.knowm.xchange.huobi.dto.marketdata.*;
 import org.knowm.xchange.huobi.dto.trade.HuobiOrder;
+import org.knowm.xchange.huobi.dto.trade.OrderSide;
 
 public class HuobiAdapters {
   private static final String ONLINE = "allowed";
@@ -226,7 +227,7 @@ public class HuobiAdapters {
     return new OpenOrders(limitOrders);
   }
 
-  private static Order adaptOrder(HuobiOrder openOrder) {
+  public static Order adaptOrder(HuobiOrder openOrder) {
     Order order = null;
     OrderType orderType = adaptOrderType(openOrder.getType());
     CurrencyPair currencyPair = adaptCurrencyPair(openOrder.getSymbol());
@@ -448,4 +449,61 @@ public class HuobiAdapters {
         return null;
     }
   }
+
+  public static OrderType convert(OrderSide side) {
+    switch (side) {
+      case BUY:
+        return OrderType.BID;
+      case SELL:
+        return OrderType.ASK;
+      default:
+        throw new RuntimeException("Not supported order side: " + side);
+    }
+  }
+
+  public static OrderSide convert(OrderType type) {
+    switch (type) {
+      case ASK:
+        return OrderSide.SELL;
+      case BID:
+        return OrderSide.BUY;
+      default:
+        throw new RuntimeException("Not supported order type: " + type);
+    }
+  }
+
+  public static String toSymbol(CurrencyPair pair) {
+    if (pair.equals(CurrencyPair.IOTA_BTC)) {
+      return "IOTABTC";
+    }
+    return pair.base.getCurrencyCode() + pair.counter.getCurrencyCode();
+  }
+
+  public static String toSymbol(Currency currency) {
+    if (Currency.IOT.equals(currency)) {
+      return "IOTA";
+    }
+    return currency.getSymbol();
+  }
+
+  public static CurrencyPair adaptSymbol(String symbol) {
+    int pairLength = symbol.length();
+    if (symbol.endsWith("USDT")) {
+      return new CurrencyPair(symbol.substring(0, pairLength - 4), "USDT");
+    } else if (symbol.endsWith("USDC")) {
+      return new CurrencyPair(symbol.substring(0, pairLength - 4), "USDC");
+    } else if (symbol.endsWith("TUSD")) {
+      return new CurrencyPair(symbol.substring(0, pairLength - 4), "TUSD");
+    } else if (symbol.endsWith("USDS")) {
+      return new CurrencyPair(symbol.substring(0, pairLength - 4), "USDS");
+    } else if (symbol.endsWith("BUSD")) {
+      return new CurrencyPair(symbol.substring(0, pairLength - 4), "BUSD");
+    } else {
+      return new CurrencyPair(
+              symbol.substring(0, pairLength - 3), symbol.substring(pairLength - 3));
+    }
+  }
+
+//    public static CurrencyPair adaptSymbol(String symbol) {
+//    }
 }
