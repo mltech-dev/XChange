@@ -56,6 +56,7 @@ public class HuobiStreamingTradeService implements StreamingTradeService {
   /** Registers subsriptions with the streaming service for the given products. */
   public void openSubscriptions() {
 	  tradeService.subOrderUpdateV2(SubOrderUpdateV2Request.builder().symbols("*").build(), orderUpdateV2Event -> {
+		  System.out.println(orderUpdateV2Event.toString());
 	      executionReportsPublisher.onNext(executionReport(orderUpdateV2Event));
 	    });
   }
