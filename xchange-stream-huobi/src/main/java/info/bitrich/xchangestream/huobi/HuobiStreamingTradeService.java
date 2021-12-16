@@ -1,47 +1,40 @@
 package info.bitrich.xchangestream.huobi;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import info.bitrich.xchangestream.core.StreamingTradeService;
-import info.bitrich.xchangestream.huobi.dto.BaseHuobiWebSocketTransaction;
-import info.bitrich.xchangestream.huobi.dto.ExecutionReportHuobiUserTransaction;
-import info.bitrich.xchangestream.service.netty.StreamingObjectMapperHelper;
-import io.reactivex.Observable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.subjects.PublishSubject;
-import io.reactivex.subjects.Subject;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.Order;
 import org.knowm.xchange.dto.trade.UserTrade;
-import org.knowm.xchange.exceptions.ExchangeException;
-import org.knowm.xchange.exceptions.ExchangeSecurityException;
 
-import java.io.IOException;
+import com.huobi.client.TradeClient;
+import com.huobi.client.req.trade.SubOrderUpdateV2Request;
+import com.huobi.constant.HuobiOptions;
+import com.huobi.model.trade.OrderUpdateV2Event;
+
+import info.bitrich.xchangestream.core.StreamingTradeService;
+import info.bitrich.xchangestream.huobi.dto.ExecutionReportHuobiUserTransaction;
+import io.reactivex.Observable;
+import io.reactivex.subjects.PublishSubject;
+import io.reactivex.subjects.Subject;
 
 public class HuobiStreamingTradeService implements StreamingTradeService {
 
   private final Subject<ExecutionReportHuobiUserTransaction> executionReportsPublisher =
       PublishSubject.<ExecutionReportHuobiUserTransaction>create().toSerialized();
 
-  private volatile Disposable executionReports;
-  private volatile HuobiUserDataStreamingService huobiUserDataStreamingService;
+  private volatile TradeClient tradeService;
 
-  private final ObjectMapper mapper = StreamingObjectMapperHelper.getObjectMapper();
-
-  public HuobiStreamingTradeService(
-      HuobiUserDataStreamingService huobiUserDataStreamingService) {
-    this.huobiUserDataStreamingService = huobiUserDataStreamingService;
+  public HuobiStreamingTradeService(String apiKey, String secretKey) {
+	  tradeService = TradeClient.create(HuobiOptions.builder()
+		        .apiKey(apiKey)
+		        .secretKey(secretKey)
+		        .build());
   }
 
   public Observable<ExecutionReportHuobiUserTransaction> getRawExecutionReports() {
-    if (huobiUserDataStreamingService == null || !huobiUserDataStreamingService.isSocketOpen())
-      throw new ExchangeSecurityException("Not authenticated");
     return executionReportsPublisher;
   }
 
   public Observable<Order> getOrderChanges() {
     return getRawExecutionReports()
-        .filter(r -> !r.getExecutionType().equals(ExecutionReportHuobiUserTransaction.ExecutionType.REJECTED))
         .map(ExecutionReportHuobiUserTransaction::toOrder);
   }
 
@@ -52,7 +45,6 @@ public class HuobiStreamingTradeService implements StreamingTradeService {
 
   public Observable<UserTrade> getUserTrades() {
     return getRawExecutionReports()
-        .filter(r -> r.getExecutionType().equals(ExecutionReportHuobiUserTransaction.ExecutionType.TRADE))
         .map(ExecutionReportHuobiUserTransaction::toUserTrade);
   }
 
@@ -63,14 +55,9 @@ public class HuobiStreamingTradeService implements StreamingTradeService {
 
   /** Registers subsriptions with the streaming service for the given products. */
   public void openSubscriptions() {
-    if (huobiUserDataStreamingService != null) {
-      executionReports =
-              huobiUserDataStreamingService
-              .subscribeChannel(
-                  BaseHuobiWebSocketTransaction.BinanceWebSocketTypes.EXECUTION_REPORT)
-              .map(this::executionReport)
-              .subscribe(executionReportsPublisher::onNext);
-    }
+	  tradeService.subOrderUpdateV2(SubOrderUpdateV2Request.builder().symbols("*").build(), orderUpdateV2Event -> {
+	      executionReportsPublisher.onNext(executionReport(orderUpdateV2Event));
+	    });
   }
 
   /**
@@ -78,18 +65,11 @@ public class HuobiStreamingTradeService implements StreamingTradeService {
    * URLs and therefore must act in a publisher fashion so that subscribers get an uninterrupted
    * stream.
    */
-  void setUserDataStreamingService(
-      HuobiUserDataStreamingService binanceUserDataStreamingService) {
-    if (executionReports != null && !executionReports.isDisposed()) executionReports.dispose();
-    this.huobiUserDataStreamingService = binanceUserDataStreamingService;
+  void setUserDataStreamingService() {
     openSubscriptions();
   }
 
-  private ExecutionReportHuobiUserTransaction executionReport(JsonNode json) {
-    try {
-      return mapper.treeToValue(json, ExecutionReportHuobiUserTransaction.class);
-    } catch (IOException e) {
-      throw new ExchangeException("Unable to parse execution report", e);
-    }
+  private ExecutionReportHuobiUserTransaction executionReport(OrderUpdateV2Event event) {
+      return new ExecutionReportHuobiUserTransaction(event);
   }
 }

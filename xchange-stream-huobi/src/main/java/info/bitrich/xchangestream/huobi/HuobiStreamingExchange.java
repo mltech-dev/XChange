@@ -32,10 +32,9 @@ public class HuobiStreamingExchange extends HuobiExchange implements StreamingEx
 
   @Override
   public Completable connect(ProductSubscription... args) {
-    Boolean aws = (Boolean) getExchangeSpecification().getExchangeSpecificParameters().getOrDefault("AWS", Boolean.FALSE);
-
-    HuobiUserDataStreamingService huobiUserDataStreamingService= new HuobiUserDataStreamingService(aws ? API_URI_AWS : API_BASE_URI);
-    huobiStreamingTradeService = new HuobiStreamingTradeService(huobiUserDataStreamingService);
+	String apiKey = getExchangeSpecification().getApiKey();
+	String secretKey = getExchangeSpecification().getSecretKey();
+    huobiStreamingTradeService = new HuobiStreamingTradeService(apiKey, secretKey);
     return streamingService.connect();
 
   }
