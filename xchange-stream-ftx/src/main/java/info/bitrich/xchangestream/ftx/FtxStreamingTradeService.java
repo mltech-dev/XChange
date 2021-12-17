@@ -28,6 +28,13 @@ public class FtxStreamingTradeService implements StreamingTradeService {
         .map(FtxStreamingAdapters::adaptUserTrade);
   }
 
+  public Observable<UserTrade> getUserTrades() {
+
+    return fills
+        .filter(jsonNode -> jsonNode.hasNonNull("data"))
+        .map(FtxStreamingAdapters::adaptUserTrade);
+  }
+
   @Override
   public Observable<Order> getOrderChanges(CurrencyPair currencyPair, Object... args) {
 
@@ -38,4 +45,11 @@ public class FtxStreamingTradeService implements StreamingTradeService {
                 new CurrencyPair(jsonNode.get("data").get("market").asText()).equals(currencyPair))
         .map(FtxStreamingAdapters::adaptOrders);
   }
+  
+  public Observable<Order> getOrderChanges() {
+
+	    return orders
+	        .filter(jsonNode -> jsonNode.hasNonNull("data"))
+	        .map(FtxStreamingAdapters::adaptOrders);
+	  }
 }
