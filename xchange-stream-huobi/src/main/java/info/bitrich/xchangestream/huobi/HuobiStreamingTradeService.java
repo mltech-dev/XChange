@@ -1,8 +1,11 @@
 package info.bitrich.xchangestream.huobi;
 
+import org.apache.commons.logging.Log;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.Order;
 import org.knowm.xchange.dto.trade.UserTrade;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.huobi.client.TradeClient;
 import com.huobi.client.req.trade.SubOrderUpdateV2Request;
@@ -16,6 +19,7 @@ import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
 public class HuobiStreamingTradeService implements StreamingTradeService {
+  private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
   private final Subject<ExecutionReportHuobiUserTransaction> executionReportsPublisher =
       PublishSubject.<ExecutionReportHuobiUserTransaction>create().toSerialized();
@@ -23,6 +27,7 @@ public class HuobiStreamingTradeService implements StreamingTradeService {
   private volatile TradeClient tradeService;
 
   public HuobiStreamingTradeService(String apiKey, String secretKey) {
+	  LOG.info("Initializing TradeClient");
 	  tradeService = TradeClient.create(HuobiOptions.builder()
 		        .apiKey(apiKey)
 		        .secretKey(secretKey)
@@ -56,7 +61,7 @@ public class HuobiStreamingTradeService implements StreamingTradeService {
   /** Registers subsriptions with the streaming service for the given products. */
   public void openSubscriptions() {
 	  tradeService.subOrderUpdateV2(SubOrderUpdateV2Request.builder().symbols("*").build(), orderUpdateV2Event -> {
-		  System.out.println(orderUpdateV2Event.toString());
+		  LOG.info(orderUpdateV2Event.toString());
 	      executionReportsPublisher.onNext(executionReport(orderUpdateV2Event));
 	    });
   }

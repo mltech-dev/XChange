@@ -7,9 +7,10 @@ import info.bitrich.xchangestream.service.netty.ConnectionStateModel.State;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import org.knowm.xchange.huobi.HuobiExchange;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HuobiStreamingExchange extends HuobiExchange implements StreamingExchange {
-
   private static final String API_BASE_URI = "wss://api.huobi.pro/ws";
   private static final String API_URI_AWS = "wss://api-aws.huobi.pro/ws";
 
@@ -36,7 +37,6 @@ public class HuobiStreamingExchange extends HuobiExchange implements StreamingEx
 	String secretKey = getExchangeSpecification().getSecretKey();
     huobiStreamingTradeService = new HuobiStreamingTradeService(apiKey, secretKey);
     return streamingService.connect();
-
   }
 
   @Override
