@@ -504,6 +504,4 @@ public class HuobiAdapters {
     }
   }
 
-//    public static CurrencyPair adaptSymbol(String symbol) {
-//    }
 }

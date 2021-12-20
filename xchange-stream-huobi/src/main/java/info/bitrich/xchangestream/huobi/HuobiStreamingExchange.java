@@ -1,14 +1,15 @@
 package info.bitrich.xchangestream.huobi;
 
+import org.knowm.xchange.exceptions.NotYetImplementedForExchangeException;
+import org.knowm.xchange.huobi.HuobiExchange;
+
 import info.bitrich.xchangestream.core.ProductSubscription;
 import info.bitrich.xchangestream.core.StreamingExchange;
 import info.bitrich.xchangestream.core.StreamingMarketDataService;
+import info.bitrich.xchangestream.core.StreamingTradeService;
 import info.bitrich.xchangestream.service.netty.ConnectionStateModel.State;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
-import org.knowm.xchange.huobi.HuobiExchange;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class HuobiStreamingExchange extends HuobiExchange implements StreamingExchange {
   private static final String API_BASE_URI = "wss://api.huobi.pro/ws";
@@ -16,7 +17,6 @@ public class HuobiStreamingExchange extends HuobiExchange implements StreamingEx
 
   private HuobiStreamingService streamingService;
   private HuobiStreamingMarketDataService streamingMarketDataService;
-  private HuobiStreamingTradeService huobiStreamingTradeService;
 
   @Override
   protected void initServices() {
@@ -33,9 +33,6 @@ public class HuobiStreamingExchange extends HuobiExchange implements StreamingEx
 
   @Override
   public Completable connect(ProductSubscription... args) {
-	String apiKey = getExchangeSpecification().getApiKey();
-	String secretKey = getExchangeSpecification().getSecretKey();
-    huobiStreamingTradeService = new HuobiStreamingTradeService(apiKey, secretKey);
     return streamingService.connect();
   }
 
@@ -70,8 +67,8 @@ public class HuobiStreamingExchange extends HuobiExchange implements StreamingEx
   }
 
   @Override
-  public HuobiStreamingTradeService getStreamingTradeService() {
-    return huobiStreamingTradeService;
+  public StreamingTradeService getStreamingTradeService() {
+    throw new NotYetImplementedForExchangeException();
   }
 
   @Override

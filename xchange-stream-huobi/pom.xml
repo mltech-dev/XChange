@@ -26,11 +26,5 @@
             <artifactId>xchange-huobi</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-        <dependency>
-		  <groupId>com.huobi.sdk</groupId>
-		  <artifactId>huobi-client</artifactId>
-		  <version>2.0.3-SNAPSHOT</version>
-        </dependency>
-        
     </dependencies>
 </project>

@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.Order.OrderType;
@@ -13,6 +14,7 @@ import org.knowm.xchange.dto.trade.LimitOrder;
 import org.knowm.xchange.dto.trade.MarketOrder;
 import org.knowm.xchange.exceptions.ExchangeException;
 import org.knowm.xchange.huobi.HuobiUtils;
+import org.knowm.xchange.huobi.dto.trade.HuobiCancelClientOrderRequest;
 import org.knowm.xchange.huobi.dto.trade.HuobiCreateOrderRequest;
 import org.knowm.xchange.huobi.dto.trade.HuobiMatchResult;
 import org.knowm.xchange.huobi.dto.trade.HuobiOrder;
@@ -121,6 +123,18 @@ public class HuobiTradeServiceRaw extends HuobiBaseService {
             signatureCreator);
     return checkResult(result);
   }
+  
+  public String cancelHuobiOrderByClientOrderId(String clientOrderId) throws IOException {
+	    HuobiCancelOrderResult result =
+	        huobi.cancelClientOrder(
+	            new HuobiCancelClientOrderRequest(clientOrderId),
+	            exchange.getExchangeSpecification().getApiKey(),
+	            HuobiDigest.HMAC_SHA_256,
+	            2,
+	            HuobiUtils.createUTCDate(exchange.getNonceFactory()),
+	            signatureCreator);
+	    return checkResult(result);
+	  }
 
   public String placeHuobiLimitOrder(LimitOrder limitOrder) throws IOException {
     String type;
