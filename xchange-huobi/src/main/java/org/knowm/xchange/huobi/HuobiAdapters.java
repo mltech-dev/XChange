@@ -146,7 +146,7 @@ public class HuobiAdapters {
     return walletHealth;
   }
 
-  private static CurrencyPair adaptCurrencyPair(String currencyPair) {
+  protected static CurrencyPair adaptCurrencyPair(String currencyPair) {
     return HuobiUtils.translateHuobiCurrencyPair(currencyPair);
   }
 
@@ -318,7 +318,7 @@ public class HuobiAdapters {
         .build();
   }
 
-  private static OrderStatus adaptOrderStatus(String huobiStatus) {
+  protected static OrderStatus adaptOrderStatus(String huobiStatus) {
     OrderStatus result = OrderStatus.UNKNOWN;
     switch (huobiStatus) {
       case "pre-submitted":
@@ -504,6 +504,4 @@ public class HuobiAdapters {
     }
   }
 
-//    public static CurrencyPair adaptSymbol(String symbol) {
-//    }
 }

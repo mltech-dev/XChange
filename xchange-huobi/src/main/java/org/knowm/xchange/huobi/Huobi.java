@@ -12,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import org.knowm.xchange.huobi.dto.account.HuobiCreateWithdrawRequest;
 import org.knowm.xchange.huobi.dto.account.results.*;
 import org.knowm.xchange.huobi.dto.marketdata.results.*;
+import org.knowm.xchange.huobi.dto.trade.HuobiCancelClientOrderRequest;
 import org.knowm.xchange.huobi.dto.trade.HuobiCreateOrderRequest;
 import org.knowm.xchange.huobi.dto.trade.results.HuobiCancelOrderResult;
 import org.knowm.xchange.huobi.dto.trade.results.HuobiMatchesResult;
@@ -261,6 +262,17 @@ public interface Huobi {
   @Path("v1/order/orders/{order-id}/submitcancel")
   HuobiCancelOrderResult cancelOrder(
       @PathParam("order-id") String orderID,
+      @QueryParam("AccessKeyId") String apiKey,
+      @QueryParam("SignatureMethod") String signatureMethod,
+      @QueryParam("SignatureVersion") int signatureVersion,
+      @QueryParam("Timestamp") String nonce,
+      @QueryParam("Signature") ParamsDigest signature)
+      throws IOException;
+  
+  @POST
+  @Path("v1/order/orders/submitCancelClientOrder")
+  HuobiCancelOrderResult cancelClientOrder(
+	  HuobiCancelClientOrderRequest cancelRequest,
       @QueryParam("AccessKeyId") String apiKey,
       @QueryParam("SignatureMethod") String signatureMethod,
       @QueryParam("SignatureVersion") int signatureVersion,

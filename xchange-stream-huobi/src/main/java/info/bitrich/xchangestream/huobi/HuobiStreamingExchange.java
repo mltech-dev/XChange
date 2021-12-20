@@ -1,21 +1,22 @@
 package info.bitrich.xchangestream.huobi;
 
+import org.knowm.xchange.exceptions.NotYetImplementedForExchangeException;
+import org.knowm.xchange.huobi.HuobiExchange;
+
 import info.bitrich.xchangestream.core.ProductSubscription;
 import info.bitrich.xchangestream.core.StreamingExchange;
 import info.bitrich.xchangestream.core.StreamingMarketDataService;
+import info.bitrich.xchangestream.core.StreamingTradeService;
 import info.bitrich.xchangestream.service.netty.ConnectionStateModel.State;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
-import org.knowm.xchange.huobi.HuobiExchange;
 
 public class HuobiStreamingExchange extends HuobiExchange implements StreamingExchange {
-
   private static final String API_BASE_URI = "wss://api.huobi.pro/ws";
   private static final String API_URI_AWS = "wss://api-aws.huobi.pro/ws";
 
   private HuobiStreamingService streamingService;
   private HuobiStreamingMarketDataService streamingMarketDataService;
-  private HuobiStreamingTradeService huobiStreamingTradeService;
 
   @Override
   protected void initServices() {
@@ -32,12 +33,7 @@ public class HuobiStreamingExchange extends HuobiExchange implements StreamingEx
 
   @Override
   public Completable connect(ProductSubscription... args) {
-    Boolean aws = (Boolean) getExchangeSpecification().getExchangeSpecificParameters().getOrDefault("AWS", Boolean.FALSE);
-
-    HuobiUserDataStreamingService huobiUserDataStreamingService= new HuobiUserDataStreamingService(aws ? API_URI_AWS : API_BASE_URI);
-    huobiStreamingTradeService = new HuobiStreamingTradeService(huobiUserDataStreamingService);
     return streamingService.connect();
-
   }
 
   @Override
@@ -71,8 +67,8 @@ public class HuobiStreamingExchange extends HuobiExchange implements StreamingEx
   }
 
   @Override
-  public HuobiStreamingTradeService getStreamingTradeService() {
-    return huobiStreamingTradeService;
+  public StreamingTradeService getStreamingTradeService() {
+    throw new NotYetImplementedForExchangeException();
   }
 
   @Override
