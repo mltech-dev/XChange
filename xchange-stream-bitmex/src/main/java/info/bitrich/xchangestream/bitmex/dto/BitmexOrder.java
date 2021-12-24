@@ -92,7 +92,7 @@ public class BitmexOrder extends BitmexMarketDataEvent {
               side.equals("Buy") ? Order.OrderType.BID : Order.OrderType.ASK,
               new CurrencyPair(symbol.substring(0, 3), symbol.substring(3, symbol.length())));
     }
-    order.id(orderID).averagePrice(avgPx).originalAmount(orderQty).cumulativeAmount(cumQty);
+    order.id(orderID).averagePrice(avgPx).originalAmount(orderQty).cumulativeAmount(cumQty).userReference(clOrdID);
 
     switch (ordStatus) {
       case NEW:
