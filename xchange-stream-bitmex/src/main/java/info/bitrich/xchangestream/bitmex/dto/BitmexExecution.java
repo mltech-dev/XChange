@@ -4,8 +4,13 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 import java.util.Date;
+
+import org.knowm.xchange.bitmex.BitmexAdapters;
 import org.knowm.xchange.bitmex.dto.marketdata.BitmexPrivateOrder;
 import org.knowm.xchange.bitmex.dto.trade.BitmexSide;
+import org.knowm.xchange.currency.Currency;
+import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.trade.UserTrade;
 
 /** @author Nikita Belenkiy on 05/06/2018. */
 public class BitmexExecution {
@@ -466,4 +471,6 @@ public class BitmexExecution {
         + timestamp
         + '}';
   }
+
+
 }
