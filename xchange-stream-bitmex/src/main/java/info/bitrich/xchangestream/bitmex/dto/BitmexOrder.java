@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.knowm.xchange.bitmex.BitmexAdapters;
 import org.knowm.xchange.currency.Currency;
@@ -139,7 +140,7 @@ public class BitmexOrder extends BitmexMarketDataEvent {
               .currencyPair(new CurrencyPair(symbol.substring(0, 3), symbol.substring(3, symbol.length())))
               .price(price)
               .timestamp(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(timestamp))
-  //            .id(Long.toString(Long.parseLong(execID)))
+              .id(Long.toString(new Date().getTime()))
               .orderId(orderID)
   //            .feeAmount(commission)
   //            .feeCurrency(Currency.getInstance(settlCurrency.toLowerCase()))
