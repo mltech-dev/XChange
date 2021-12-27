@@ -20,7 +20,7 @@ public final class OpenOrders implements Serializable {
 
   private final List<LimitOrder> openOrders;
   private final List<? extends Order> hiddenOrders;
-
+  
   /**
    * Constructor
    *
@@ -30,6 +30,8 @@ public final class OpenOrders implements Serializable {
     this.openOrders = openOrders;
     this.hiddenOrders = Collections.emptyList();
   }
+  
+  
 
   /**
    * Constructor
@@ -40,7 +42,7 @@ public final class OpenOrders implements Serializable {
   @JsonCreator
   public OpenOrders(
       @JsonProperty("openOrders") List<LimitOrder> openOrders,
-      @JsonProperty("hiddenOrders") List<Order> hiddenOrders) {
+      @JsonProperty("hiddenOrders") List<? extends Order> hiddenOrders) {
     this.openOrders = openOrders;
     this.hiddenOrders = hiddenOrders;
   }
