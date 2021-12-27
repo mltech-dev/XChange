@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.knowm.xchange.bitmex.BitmexAdapters;
 import org.knowm.xchange.currency.Currency;
 import org.knowm.xchange.currency.CurrencyPair;
@@ -88,16 +89,23 @@ public class BitmexOrder extends BitmexMarketDataEvent {
 
   public Order toOrder() {
     Order.Builder order;
-    if (ordType.equals("Market")) {
-      order =
-          new MarketOrder.Builder(
-              side.equals("Buy") ? Order.OrderType.BID : Order.OrderType.ASK,
-              new CurrencyPair(symbol.substring(0, 3), symbol.substring(3, symbol.length())));
+    if(!ObjectUtils.isEmpty(ordType) &&
+    		!ObjectUtils.isEmpty(side)) {
+        if (ordType.equals("Market")) {
+            order =
+                new MarketOrder.Builder(
+                    side.equals("Buy") ? Order.OrderType.BID : Order.OrderType.ASK,
+                    new CurrencyPair(symbol.substring(0, 3), symbol.substring(3, symbol.length())));
+          } else {
+            order =
+                new LimitOrder.Builder(
+                    side.equals("Buy") ? Order.OrderType.BID : Order.OrderType.ASK,
+                    new CurrencyPair(symbol.substring(0, 3), symbol.substring(3, symbol.length())));
+          }    	
     } else {
-      order =
-          new LimitOrder.Builder(
-              side.equals("Buy") ? Order.OrderType.BID : Order.OrderType.ASK,
-              new CurrencyPair(symbol.substring(0, 3), symbol.substring(3, symbol.length())));
+    	order = new LimitOrder.Builder(
+                null,
+                new CurrencyPair(symbol.substring(0, 3), symbol.substring(3, symbol.length())));
     }
     order.id(orderID).averagePrice(avgPx).originalAmount(orderQty).cumulativeAmount(cumQty).userReference(clOrdID);
 
@@ -123,7 +131,7 @@ public class BitmexOrder extends BitmexMarketDataEvent {
         order.orderStatus(Order.OrderStatus.UNKNOWN);
         break;
     }
-    if (ordType.equals("Market")) {
+    if (!ObjectUtils.isEmpty(ordType) && ordType.equals("Market")) {
       return ((MarketOrder.Builder) order).build();
     } else {
       return ((LimitOrder.Builder) order).build();
