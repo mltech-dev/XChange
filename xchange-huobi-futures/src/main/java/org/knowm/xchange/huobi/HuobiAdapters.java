@@ -18,6 +18,7 @@ import org.knowm.xchange.dto.Order.OrderType;
 import org.knowm.xchange.dto.account.Balance;
 import org.knowm.xchange.dto.account.FundingRecord;
 import org.knowm.xchange.dto.account.FundingRecord.Status;
+import org.knowm.xchange.dto.account.OpenPosition;
 import org.knowm.xchange.dto.account.Wallet;
 import org.knowm.xchange.dto.marketdata.Ticker;
 import org.knowm.xchange.dto.marketdata.Trades.TradeSortType;
@@ -31,6 +32,7 @@ import org.knowm.xchange.dto.trade.OpenOrders;
 import org.knowm.xchange.dto.trade.UserTrade;
 import org.knowm.xchange.dto.trade.UserTrades;
 import org.knowm.xchange.exceptions.ExchangeException;
+import org.knowm.xchange.huobi.dto.account.HuobiBalance;
 import org.knowm.xchange.huobi.dto.account.HuobiBalanceRecord;
 import org.knowm.xchange.huobi.dto.account.HuobiBalanceSum;
 import org.knowm.xchange.huobi.dto.account.HuobiFundingRecord;
@@ -42,6 +44,7 @@ import org.knowm.xchange.huobi.dto.marketdata.HuobiCurrencyWrapper;
 import org.knowm.xchange.huobi.dto.marketdata.HuobiTicker;
 import org.knowm.xchange.huobi.dto.trade.HuobiOrder;
 import org.knowm.xchange.huobi.dto.trade.OrderSide;
+import org.knowm.xchange.huobi.dto.trade.results.PositionResultData;
 
 public class HuobiAdapters {
   private static final String ONLINE = "allowed";
@@ -211,21 +214,27 @@ public class HuobiAdapters {
     return Wallet.Builder.from(balances).build();
   }
 
-  public static Map<String, HuobiBalanceSum> adaptBalance(HuobiBalanceRecord[] huobiBalance) {
-    Map<String, HuobiBalanceSum> map = new HashMap<>();
-    for (HuobiBalanceRecord record : huobiBalance) {
-      HuobiBalanceSum sum = map.get(record.getCurrency());
-      if (sum == null) {
-        sum = new HuobiBalanceSum();
-        map.put(record.getCurrency(), sum);
-      }
-      if (record.getType().equals("trade")) {
-        sum.setAvailable(record.getBalance());
-      } else if (record.getType().equals("frozen")) {
-        sum.setFrozen(record.getBalance());
-      }
-    }
-    return map;
+  public static Map<String, HuobiBalanceSum> adaptBalance(List<HuobiBalance> list) {
+		Map<String, HuobiBalanceSum> map = new HashMap<>();
+		HuobiAsset[] huobiAssets = new HuobiAsset[list.size()];
+		int counter = 0;
+		for (HuobiBalance record : list) {
+			huobiAssets[counter] = new HuobiAsset(record.getSymbol());
+			counter++;
+			
+			HuobiBalanceSum sum = map.get(record.getSymbol());
+			if (sum == null) {
+				sum = new HuobiBalanceSum();
+				map.put(record.getSymbol(), sum);
+			}
+//      if (record.getType().equals("trade")) {
+			sum.setAvailable(record.getMarginAvailable());
+//      } else if (record.getType().equals("frozen")) {
+			sum.setFrozen(record.getMarginFrozen());
+//      }
+		}
+		HuobiUtils.setHuobiAssets(huobiAssets);
+		return map;
   }
 
   public static OpenOrders adaptOpenOrders(HuobiOrder[] openOrders) {
@@ -472,6 +481,17 @@ public class HuobiAdapters {
       return new CurrencyPair(
               symbol.substring(0, pairLength - 3), symbol.substring(pairLength - 3));
     }
+  }
+  
+  public static List<OpenPosition> adaptPosition(List<PositionResultData> positionData){
+	  List<OpenPosition> openPositions = new ArrayList<>();
+	  
+	  for(PositionResultData data : positionData) {
+		  OpenPosition.Type type = data.getDirection().equals("buy") ? OpenPosition.Type.LONG : OpenPosition.Type.SHORT; 
+		  openPositions.add(new OpenPosition(new CurrencyPair(data.getSymbol()+"/USDT"), type,data.getVolume() , data.getLastPrice())); 
+	  }
+	  
+	  return openPositions;
   }
 
 }

@@ -2,6 +2,7 @@ package info.bitrich.xchangestream.huobi;
 
 import org.knowm.xchange.exceptions.NotYetImplementedForExchangeException;
 import org.knowm.xchange.huobi.HuobiFuturesExchange;
+import org.knowm.xchange.service.account.AccountService;
 
 import info.bitrich.xchangestream.core.ProductSubscription;
 import info.bitrich.xchangestream.core.StreamingExchange;
@@ -59,6 +60,11 @@ public class HuobiStreamingExchange extends HuobiFuturesExchange implements Stre
   public StreamingMarketDataService getStreamingMarketDataService() {
     return streamingMarketDataService;
   }
+  
+  @Override
+	public AccountService getAccountService() {
+		return super.getAccountService();
+	}
 
   @Override
   public StreamingTradeService getStreamingTradeService() {
