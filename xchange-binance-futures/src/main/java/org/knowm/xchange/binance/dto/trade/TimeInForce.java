@@ -6,7 +6,8 @@ import org.knowm.xchange.dto.Order.IOrderFlags;
 public enum TimeInForce implements IOrderFlags {
   GTC,
   FOK,
-  IOC;
+  IOC,
+  GTX;
 
   @JsonCreator
   public static TimeInForce getTimeInForce(String s) {
