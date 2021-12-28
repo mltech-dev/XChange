@@ -8,10 +8,15 @@ import org.knowm.xchange.currency.Currency;
 import org.knowm.xchange.dto.account.AccountInfo;
 import org.knowm.xchange.dto.account.AddressWithTag;
 import org.knowm.xchange.dto.account.FundingRecord;
+import org.knowm.xchange.dto.account.OpenPosition;
 import org.knowm.xchange.exceptions.ExchangeException;
 import org.knowm.xchange.huobi.HuobiAdapters;
+import org.knowm.xchange.huobi.HuobiUtils;
 import org.knowm.xchange.huobi.dto.account.HuobiAccount;
 import org.knowm.xchange.huobi.dto.account.HuobiDepositAddress;
+import org.knowm.xchange.huobi.dto.trade.HuobiAccountInfoRequest;
+import org.knowm.xchange.huobi.dto.trade.results.PositionResult;
+import org.knowm.xchange.huobi.dto.trade.results.PositionResultData;
 import org.knowm.xchange.service.account.AccountService;
 import org.knowm.xchange.service.trade.params.DefaultWithdrawFundsParams;
 import org.knowm.xchange.service.trade.params.HistoryParamsFundingType;
@@ -60,7 +65,7 @@ public class HuobiAccountService extends HuobiAccountServiceRaw implements Accou
     return new AccountInfo(
         "",
         HuobiAdapters.adaptWallet(
-            HuobiAdapters.adaptBalance(getHuobiBalance().getList())));
+            HuobiAdapters.adaptBalance(getHuobiBalance())));
   }
 
   @Override
@@ -110,4 +115,8 @@ public class HuobiAccountService extends HuobiAccountServiceRaw implements Accou
         new AddressWithTag(huobiAddrWithTag.getAddress(), huobiAddrWithTag.getAddressTag());
     return addressWithTag;
   }
+  
+	public List<OpenPosition> getContractPosition() throws IOException {
+		return super.getContractPosition();
+	}
 }

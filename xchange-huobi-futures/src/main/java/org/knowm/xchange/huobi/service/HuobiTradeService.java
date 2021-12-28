@@ -113,9 +113,8 @@ public class HuobiTradeService extends HuobiTradeServiceRaw implements TradeServ
     return new HuobiTradeHistoryParams();
   }
 
-  @Override
-  public boolean cancelOrder(String orderId) throws IOException {
-    return cancelHuobiOrder(orderId).length() > 0;
+  public boolean cancelOrder(String orderId,String clientOrderId,CurrencyPair currencyPair) throws IOException {
+    return cancelHuobiOrder(orderId,clientOrderId,currencyPair).length() > 0;
   }
 
   @Override

@@ -29,7 +29,8 @@ import org.knowm.xchange.huobi.dto.marketdata.results.HuobiDepthResult;
 import org.knowm.xchange.huobi.dto.marketdata.results.HuobiKlinesResult;
 import org.knowm.xchange.huobi.dto.marketdata.results.HuobiTickerResult;
 import org.knowm.xchange.huobi.dto.marketdata.results.HuobiTradesResult;
-import org.knowm.xchange.huobi.dto.trade.HuobiCancelClientOrderRequest;
+import org.knowm.xchange.huobi.dto.trade.HuobiAccountInfoRequest;
+import org.knowm.xchange.huobi.dto.trade.HuobiCancelOrderRequest;
 import org.knowm.xchange.huobi.dto.trade.HuobiCreateOrderRequest;
 import org.knowm.xchange.huobi.dto.trade.HuobiOpenOrdersRequest;
 import org.knowm.xchange.huobi.dto.trade.HuobiOrderByOrderIdRequest;
@@ -38,6 +39,7 @@ import org.knowm.xchange.huobi.dto.trade.results.HuobiMatchesResult;
 import org.knowm.xchange.huobi.dto.trade.results.HuobiOrderInfoResult;
 import org.knowm.xchange.huobi.dto.trade.results.HuobiOrderResult;
 import org.knowm.xchange.huobi.dto.trade.results.HuobiOrdersResult;
+import org.knowm.xchange.huobi.dto.trade.results.PositionResult;
 
 import si.mazi.rescu.ParamsDigest;
 
@@ -280,10 +282,10 @@ public interface Huobi {
       throws IOException;
 
   @POST
-  @Path("v1/order/orders/{order-id}/submitcancel")
+  @Path("api/v1/contract_cancel")
   HuobiCancelOrderResult cancelOrder(
-      @PathParam("order-id") String orderID,
-      @QueryParam("AccessKeyId") String apiKey,
+	  HuobiCancelOrderRequest huobiCancelOrderRequest,
+	  @QueryParam("AccessKeyId") String apiKey,
       @QueryParam("SignatureMethod") String signatureMethod,
       @QueryParam("SignatureVersion") int signatureVersion,
       @QueryParam("Timestamp") String nonce,
@@ -293,7 +295,7 @@ public interface Huobi {
   @POST
   @Path("api/v1/order/orders/submitCancelClientOrder")
   HuobiCancelOrderResult cancelClientOrder(
-	  HuobiCancelClientOrderRequest cancelRequest,
+	  HuobiCancelOrderRequest cancelRequest,
       @QueryParam("AccessKeyId") String apiKey,
       @QueryParam("SignatureMethod") String signatureMethod,
       @QueryParam("SignatureVersion") int signatureVersion,
@@ -306,6 +308,29 @@ public interface Huobi {
   @Consumes(MediaType.APPLICATION_JSON)
   HuobiOrderResult placeContractOrder(
       HuobiCreateOrderRequest body,
+      @QueryParam("AccessKeyId") String apiKey,
+      @QueryParam("SignatureMethod") String signatureMethod,
+      @QueryParam("SignatureVersion") int signatureVersion,
+      @QueryParam("Timestamp") String nonce,
+      @QueryParam("Signature") ParamsDigest signature)
+      throws IOException;
+  
+  @POST
+  @Path("api/v1/contract_position_info")
+  @Consumes(MediaType.APPLICATION_JSON)
+  PositionResult getContractPositioInfo(
+	  HuobiAccountInfoRequest body,
+      @QueryParam("AccessKeyId") String apiKey,
+      @QueryParam("SignatureMethod") String signatureMethod,
+      @QueryParam("SignatureVersion") int signatureVersion,
+      @QueryParam("Timestamp") String nonce,
+      @QueryParam("Signature") ParamsDigest signature)
+      throws IOException;
+  
+  @POST
+  @Path("api/v1/contract_position_info")
+  @Consumes(MediaType.APPLICATION_JSON)
+  PositionResult getContractPositioInfo(
       @QueryParam("AccessKeyId") String apiKey,
       @QueryParam("SignatureMethod") String signatureMethod,
       @QueryParam("SignatureVersion") int signatureVersion,

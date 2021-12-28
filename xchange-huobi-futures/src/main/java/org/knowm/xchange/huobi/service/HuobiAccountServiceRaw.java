@@ -2,7 +2,11 @@ package org.knowm.xchange.huobi.service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
+
 import org.knowm.xchange.Exchange;
+import org.knowm.xchange.dto.account.OpenPosition;
+import org.knowm.xchange.huobi.HuobiAdapters;
 import org.knowm.xchange.huobi.HuobiUtils;
 import org.knowm.xchange.huobi.dto.account.HuobiAccount;
 import org.knowm.xchange.huobi.dto.account.HuobiBalance;
@@ -24,6 +28,8 @@ import org.knowm.xchange.huobi.dto.account.results.HuobiFundingHistoryResult;
 import org.knowm.xchange.huobi.dto.account.results.HuobiTransactFeeRateResult;
 import org.knowm.xchange.huobi.dto.account.results.HuobiWithdrawFeeRangeResult;
 import org.knowm.xchange.huobi.dto.trade.HuobiAccountInfoRequest;
+import org.knowm.xchange.huobi.dto.trade.results.PositionResult;
+import org.knowm.xchange.huobi.dto.trade.results.PositionResultData;
 
 public class HuobiAccountServiceRaw extends HuobiBaseService {
   private HuobiAccount[] accountCache = null;
@@ -32,7 +38,7 @@ public class HuobiAccountServiceRaw extends HuobiBaseService {
     super(exchange);
   }
 
-  HuobiBalance getHuobiBalance() throws IOException {
+  List<HuobiBalance> getHuobiBalance() throws IOException {
     HuobiBalanceResult huobiBalanceResult =
         huobi.getBalance(
             exchange.getExchangeSpecification().getApiKey(),
@@ -162,4 +168,19 @@ public class HuobiAccountServiceRaw extends HuobiBaseService {
             signatureCreator);
     return checkResult(createWithdrawResult);
   }
+  
+  public List<OpenPosition> getContractPosition() throws IOException {
+	  
+	  	PositionResult result =
+	        huobi.getContractPositioInfo(
+	            exchange.getExchangeSpecification().getApiKey(),
+	            HuobiDigest.HMAC_SHA_256,
+	            2,
+	            HuobiUtils.createUTCDate(exchange.getNonceFactory()),
+	            signatureCreator);
+	  	List<PositionResultData> positionData =  checkResult(result);
+	  	
+	    return HuobiAdapters.adaptPosition(positionData); 
+	  }
+  
 }

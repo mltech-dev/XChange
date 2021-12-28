@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.Order.OrderType;
@@ -16,7 +17,7 @@ import org.knowm.xchange.dto.trade.MarketOrder;
 import org.knowm.xchange.exceptions.ExchangeException;
 import org.knowm.xchange.huobi.HuobiAdapters;
 import org.knowm.xchange.huobi.HuobiUtils;
-import org.knowm.xchange.huobi.dto.trade.HuobiCancelClientOrderRequest;
+import org.knowm.xchange.huobi.dto.trade.HuobiCancelOrderRequest;
 import org.knowm.xchange.huobi.dto.trade.HuobiCreateOrderRequest;
 import org.knowm.xchange.huobi.dto.trade.HuobiMatchResult;
 import org.knowm.xchange.huobi.dto.trade.HuobiOpenOrdersRequest;
@@ -115,10 +116,12 @@ public class HuobiTradeServiceRaw extends HuobiBaseService {
     return checkResult(result);
   }
 
-  public String cancelHuobiOrder(String orderId) throws IOException {
+  public String cancelHuobiOrder(String orderId,String clientOrderId,CurrencyPair currencyPair) throws IOException {
+	  String currency = HuobiAdapters.toSymbol(currencyPair);
+	  
     HuobiCancelOrderResult result =
         huobi.cancelOrder(
-            orderId,
+            new HuobiCancelOrderRequest(clientOrderId, clientOrderId, currency),
             exchange.getExchangeSpecification().getApiKey(),
             HuobiDigest.HMAC_SHA_256,
             2,
@@ -127,17 +130,6 @@ public class HuobiTradeServiceRaw extends HuobiBaseService {
     return checkResult(result);
   }
   
-  public String cancelHuobiOrderByClientOrderId(String clientOrderId) throws IOException {
-	    HuobiCancelOrderResult result =
-	        huobi.cancelClientOrder(
-	            new HuobiCancelClientOrderRequest(clientOrderId),
-	            exchange.getExchangeSpecification().getApiKey(),
-	            HuobiDigest.HMAC_SHA_256,
-	            2,
-	            HuobiUtils.createUTCDate(exchange.getNonceFactory()),
-	            signatureCreator);
-	    return checkResult(result);
-	  }
 
   public String placeHuobiFuturesOrder(FuturesOrder futuresOrder) throws IOException {
     String direction;
