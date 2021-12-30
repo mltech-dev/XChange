@@ -173,9 +173,9 @@
     <module>xchange-hitbtc</module>
     -->
     <module>xchange-huobi</module>
-	  <module>xchange-huobi-futures</module>
-	  <module>xchange-huobi-linear-swap</module>
-	  <module>xchange-huobi-swap</module>
+	<module>xchange-huobi-futures</module>
+	<module>xchange-huobi-linear-swap</module>
+	<module>xchange-huobi-swap</module>
     <!--
     <module>xchange-idex</module>
     <module>xchange-independentreserve</module>
@@ -236,9 +236,8 @@
     -->
     <module>xchange-stream-huobi</module>
   	<module>xchange-stream-huobi-futures</module>
-	  <module>xchange-stream-huobi-linear-swap</module>
-	  <module>xchange-stream-huobi-swap</module>
-	  <module>xchange-stream-huobi-futures</module>
+	<module>xchange-stream-huobi-linear-swap</module>
+	<module>xchange-stream-huobi-swap</module>
     <!--
     <module>xchange-stream-kraken</module>
     <module>xchange-stream-lgo</module>
