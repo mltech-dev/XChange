@@ -269,6 +269,9 @@ public class HuobiAdapters {
 		case 7:
 			result = OrderStatus.CANCELED;
 			break;
+		case 11:
+			result = OrderStatus.PENDING_CANCEL;
+			break;
 		}
 		return result;
 	}
