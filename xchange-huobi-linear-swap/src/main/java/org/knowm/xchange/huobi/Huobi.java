@@ -271,6 +271,7 @@ public interface Huobi {
       throws IOException;
 
 	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("linear-swap-api/v1/swap_cancel")
 	HuobiCancelOrderResult cancelOrder(
 			HuobiCancelOrderRequest huobiCancelOrderRequest,

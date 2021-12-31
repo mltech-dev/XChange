@@ -4,20 +4,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class HuobiCancelOrderRequest {
 
-	@JsonProperty("client-order-id")
+	@JsonProperty("client_order_id")
 	private String clientOrderId;
 	
 	@JsonProperty("order_id")
 	private String orderId;
 	
-	@JsonProperty("symbol")
-	private String symbol;
+	@JsonProperty("contract_code")
+	private String contractCode;
 
-	public HuobiCancelOrderRequest(String clientOrderId, String orderId, String symbol) {
-		super();
+	public HuobiCancelOrderRequest(String clientOrderId, String orderId, String contractCode) {
 		this.clientOrderId = clientOrderId;
 		this.orderId = orderId;
-		this.symbol = symbol;
+		this.contractCode = contractCode;
 	}
 
 	public String getClientOrderId() {
@@ -36,14 +35,13 @@ public class HuobiCancelOrderRequest {
 		this.orderId = orderId;
 	}
 
-	public String getSymbol() {
-		return symbol;
+	public String getContractCode() {
+		return contractCode;
 	}
 
-	public void setSymbol(String symbol) {
-		this.symbol = symbol;
+	public void setContractCode(String contractCode) {
+		this.contractCode = contractCode;
 	}
-	
 
 	
 	

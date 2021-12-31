@@ -117,17 +117,17 @@ public class HuobiTradeServiceRaw extends HuobiBaseService {
   }
 
   public String cancelHuobiOrder(String orderId,String clientOrderId,CurrencyPair currencyPair) throws IOException {
-	  String currency = HuobiAdapters.toSymbol(currencyPair);
+	  String currency = HuobiAdapters.toSymbolForGetOrder(currencyPair);
 	  
-    HuobiCancelOrderResult result =
+	  HuobiCancelOrderResult result =
         huobi.cancelOrder(
-            new HuobiCancelOrderRequest(clientOrderId, clientOrderId, currency),
+            new HuobiCancelOrderRequest(clientOrderId, orderId, currency),
             exchange.getExchangeSpecification().getApiKey(),
             HuobiDigest.HMAC_SHA_256,
             2,
             HuobiUtils.createUTCDate(exchange.getNonceFactory()),
             signatureCreator);
-    return checkResult(result);
+    return checkResult(result).getSuccesses();
   }
 
   public String placeHuobiOrder(FuturesOrder futuresOrder) throws IOException {
