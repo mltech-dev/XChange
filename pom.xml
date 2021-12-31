@@ -39,7 +39,7 @@
     <version.junit>4.13.2</version.junit>
     <version.lombok>1.18.22</version.lombok>
     <version.knowm.xchart>3.8.1</version.knowm.xchart>
-    <version.qos.logback>1.2.7</version.qos.logback>
+    <version.qos.logback>1.2.9</version.qos.logback>
     <version.reflections>0.10.2</version.reflections>
     <version.slf4j>1.7.32</version.slf4j>
     <version.crypto>5.0.0</version.crypto>
@@ -63,12 +63,15 @@
     </license>
   </licenses>
 
+  <!--
   <issueManagement>
     <system>GitHub</system>
-    <url>https://github.com/knowm/XChange/issues</url>
+    <url>https://github.com/mltech-dev/XChange/issues</url>
   </issueManagement>
+  -->
 
   <distributionManagement>
+    <!--
     <snapshotRepository>
       <id>sonatype-nexus-snapshots</id>
       <name>Sonatype Nexus Snapshots</name>
@@ -80,6 +83,12 @@
       <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
     </repository>
     <downloadUrl>https://oss.sonatype.org/content/groups/public/org/knowm/xchange</downloadUrl>
+    -->
+    <repository>
+      <id>github</id>
+      <name>GitHub mltech-dev Apache Maven Packages</name>
+      <url>https://maven.pkg.github.com/mltech-dev/XChange</url>
+    </repository>
   </distributionManagement>
 
   <scm>
@@ -90,11 +99,13 @@
   </scm>
 
   <modules>
-    <module>xchange-core</module>
-	<module>xchange-bankera</module>
+    <!--
+    <module>xchange-bankera</module>
     <module>xchange-bibox</module>
+    -->
     <module>xchange-binance</module>
 	<module>xchange-binance-futures</module>
+    <!--
     <module>xchange-bitbay</module>
     <module>xchange-bitcoinaverage</module>
     <module>xchange-bitcoincharts</module>
@@ -106,7 +117,9 @@
     <module>xchange-bitflyer</module>
     <module>xchange-bithumb</module>
     <module>xchange-ascendex</module>
+    -->
     <module>xchange-bitmex</module>
+    <!--
     <module>xchange-bitso</module>
     <module>xchange-bitstamp</module>
     <module>xchange-bittrex</module>
@@ -135,6 +148,9 @@
     <module>xchange-coingi</module>
     <module>xchange-coinmarketcap</module>
     <module>xchange-coinmate</module>
+    -->
+    <module>xchange-core</module>
+    <!--
     <module>xchange-cryptofacilities</module>
     <module>xchange-cryptopia</module>
     <module>xchange-coinsuper</module>
@@ -148,15 +164,19 @@
     <module>xchange-exx</module>
     <module>xchange-examples</module>
     <module>xchange-fcoin</module>
+    -->
     <module>xchange-ftx</module>
+    <!--
     <module>xchange-gateio</module>
     <module>xchange-globitex</module>
     <module>xchange-gemini</module>
     <module>xchange-hitbtc</module>
+    -->
     <module>xchange-huobi</module>
-	<module>xchange-huobi-futures</module>
-	<module>xchange-huobi-linear-swap</module>
-	<module>xchange-huobi-swap</module>
+	  <module>xchange-huobi-futures</module>
+	  <module>xchange-huobi-linear-swap</module>
+	  <module>xchange-huobi-swap</module>
+    <!--
     <module>xchange-idex</module>
     <module>xchange-independentreserve</module>
     <module>xchange-itbit</module>
@@ -190,12 +210,11 @@
     <module>xchange-yobit</module>
     <module>xchange-zaif</module>
     <module>xchange-enigma</module>
-
-
-    <module>xchange-stream-core</module>
     <module>xchange-stream-bankera</module>
+    -->
     <module>xchange-stream-binance</module>
 	<module>xchange-stream-binance-futures</module>
+    <!--
     <module>xchange-stream-bitfinex</module>
     <module>xchange-stream-bitflyer</module>
     <module>xchange-stream-bitmex</module>
@@ -205,26 +224,34 @@
     <module>xchange-stream-coinbasepro</module>
     <module>xchange-stream-coinjar</module>
     <module>xchange-stream-coinmate</module>
-    <module>xchange-stream-dydx</module>
+    -->
+    <module>xchange-stream-core</module>
+<!--    <module>xchange-stream-dydx</module>-->
     <module>xchange-stream-ftx</module>
+    <!--
     <module>xchange-stream-gateio</module>
     <module>xchange-stream-gemini</module>
     <module>xchange-stream-gemini-v2</module>
     <module>xchange-stream-hitbtc</module>
+    -->
     <module>xchange-stream-huobi</module>
-	<module>xchange-stream-huobi-futures</module>
-	<module>xchange-stream-huobi-linear-swap</module>
-	<module>xchange-stream-huobi-swap</module>
+  	<module>xchange-stream-huobi-futures</module>
+	  <module>xchange-stream-huobi-linear-swap</module>
+	  <module>xchange-stream-huobi-swap</module>
+	  <module>xchange-stream-huobi-futures</module>
+    <!--
     <module>xchange-stream-kraken</module>
     <module>xchange-stream-lgo</module>
     <module>xchange-stream-okcoin</module>
     <module>xchange-stream-poloniex2</module>
     <module>xchange-stream-serum</module>
+    -->
     <module>xchange-stream-service-core</module>
     <module>xchange-stream-service-netty</module>
     <module>xchange-stream-service-pubnub</module>
   </modules>
 
+  <!--
   <ciManagement>
     <url>https://travis-ci.org/github/knowm/XChange</url>
   </ciManagement>
@@ -241,6 +268,7 @@
       </snapshots>
     </repository>
   </repositories>
+  -->
 
   <dependencyManagement>
     <dependencies>
@@ -361,7 +389,7 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.1.70.Final</version>
+            <version>4.1.72.Final</version>
         </dependency>
 
     </dependencies>
