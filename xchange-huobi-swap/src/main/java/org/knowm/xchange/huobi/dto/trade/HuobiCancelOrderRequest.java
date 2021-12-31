@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class HuobiCancelOrderRequest {
 
-	@JsonProperty("client-order-id")
+	@JsonProperty("client_order_id")
 	private String clientOrderId;
 	
 	@JsonProperty("order_id")
 	private String orderId;
 	
-	@JsonProperty("symbol")
+	@JsonProperty("contract_code")
 	private String symbol;
 
 	public HuobiCancelOrderRequest(String clientOrderId, String orderId, String symbol) {
