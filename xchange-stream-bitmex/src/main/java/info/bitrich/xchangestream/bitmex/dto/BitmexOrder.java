@@ -3,10 +3,18 @@ package info.bitrich.xchangestream.bitmex.dto;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.apache.commons.lang3.ObjectUtils;
+import org.knowm.xchange.bitmex.BitmexAdapters;
+import org.knowm.xchange.currency.Currency;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.Order;
 import org.knowm.xchange.dto.trade.LimitOrder;
 import org.knowm.xchange.dto.trade.MarketOrder;
+import org.knowm.xchange.dto.trade.UserTrade;
 
 public class BitmexOrder extends BitmexMarketDataEvent {
 
@@ -81,18 +89,25 @@ public class BitmexOrder extends BitmexMarketDataEvent {
 
   public Order toOrder() {
     Order.Builder order;
-    if (ordType.equals("Market")) {
-      order =
-          new MarketOrder.Builder(
-              side.equals("Buy") ? Order.OrderType.BID : Order.OrderType.ASK,
-              new CurrencyPair(symbol.substring(0, 3), symbol.substring(3, symbol.length())));
+    if(!ObjectUtils.isEmpty(ordType) &&
+    		!ObjectUtils.isEmpty(side)) {
+        if (ordType.equals("Market")) {
+            order =
+                new MarketOrder.Builder(
+                    side.equals("Buy") ? Order.OrderType.BID : Order.OrderType.ASK,
+                    new CurrencyPair(symbol.substring(0, 3), symbol.substring(3, symbol.length())));
+          } else {
+            order =
+                new LimitOrder.Builder(
+                    side.equals("Buy") ? Order.OrderType.BID : Order.OrderType.ASK,
+                    new CurrencyPair(symbol.substring(0, 3), symbol.substring(3, symbol.length())));
+          }    	
     } else {
-      order =
-          new LimitOrder.Builder(
-              side.equals("Buy") ? Order.OrderType.BID : Order.OrderType.ASK,
-              new CurrencyPair(symbol.substring(0, 3), symbol.substring(3, symbol.length())));
+    	order = new LimitOrder.Builder(
+                null,
+                new CurrencyPair(symbol.substring(0, 3), symbol.substring(3, symbol.length())));
     }
-    order.id(orderID).averagePrice(avgPx).originalAmount(orderQty).cumulativeAmount(cumQty);
+    order.id(orderID).averagePrice(avgPx).originalAmount(orderQty).cumulativeAmount(cumQty).userReference(clOrdID);
 
     switch (ordStatus) {
       case NEW:
@@ -116,11 +131,33 @@ public class BitmexOrder extends BitmexMarketDataEvent {
         order.orderStatus(Order.OrderStatus.UNKNOWN);
         break;
     }
-    if (ordType.equals("Market")) {
+    if (!ObjectUtils.isEmpty(ordType) && ordType.equals("Market")) {
       return ((MarketOrder.Builder) order).build();
     } else {
       return ((LimitOrder.Builder) order).build();
     }
+  }
+
+  public UserTrade toUserTrade() {
+//    if (.equals("Trade")) throw new IllegalStateException("Not a trade");
+
+    try {
+      return new UserTrade.Builder()
+              .type(side.equals("Buy") ? Order.OrderType.BID : Order.OrderType.ASK)
+              .originalAmount(new BigDecimal(String.valueOf(orderQty)))
+              .currencyPair(new CurrencyPair(symbol.substring(0, 3), symbol.substring(3, symbol.length())))
+              .price(price)
+              .timestamp(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(timestamp))
+              .id(Long.toString(new Date().getTime()))
+              .orderId(orderID)
+  //            .feeAmount(commission)
+  //            .feeCurrency(Currency.getInstance(settlCurrency.toLowerCase()))
+              .build();
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+
+    return null;
   }
 
   public String getOrderID() {
