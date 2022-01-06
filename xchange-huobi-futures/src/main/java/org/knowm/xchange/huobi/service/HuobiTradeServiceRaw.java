@@ -3,17 +3,12 @@ package org.knowm.xchange.huobi.service;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.Order.OrderType;
 import org.knowm.xchange.dto.trade.FuturesOrder;
-import org.knowm.xchange.dto.trade.LimitOrder;
-import org.knowm.xchange.dto.trade.MarketOrder;
 import org.knowm.xchange.exceptions.ExchangeException;
 import org.knowm.xchange.huobi.HuobiAdapters;
 import org.knowm.xchange.huobi.HuobiUtils;
@@ -25,11 +20,9 @@ import org.knowm.xchange.huobi.dto.trade.HuobiOrder;
 import org.knowm.xchange.huobi.dto.trade.HuobiOrderByOrderIdRequest;
 import org.knowm.xchange.huobi.dto.trade.results.HuobiCancelOrderResult;
 import org.knowm.xchange.huobi.dto.trade.results.HuobiMatchesResult;
-import org.knowm.xchange.huobi.dto.trade.results.HuobiOrderInfoResult;
 import org.knowm.xchange.huobi.dto.trade.results.HuobiOrderResult;
 import org.knowm.xchange.huobi.dto.trade.results.HuobiOrdersResult;
 import org.knowm.xchange.service.trade.params.CurrencyPairParam;
-import org.knowm.xchange.service.trade.params.InstrumentParam;
 
 public class HuobiTradeServiceRaw extends HuobiBaseService {
   private static final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
@@ -148,7 +141,7 @@ public class HuobiTradeServiceRaw extends HuobiBaseService {
             		direction,
             		futuresOrder.getLeverRate(),
             		futuresOrder.getOffset(),
-            		futuresOrder.getOrderPriceType(),
+            		HuobiAdapters.getOrderPriceType(futuresOrder.getOrderPriceType()),
             		futuresOrder.getPrice(),
             		HuobiUtils.createHuobiInstument(futuresOrder.getCurrencyPair()),
             		futuresOrder.getOriginalAmount(),
