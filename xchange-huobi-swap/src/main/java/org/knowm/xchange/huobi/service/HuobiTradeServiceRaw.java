@@ -146,7 +146,7 @@ public class HuobiTradeServiceRaw extends HuobiBaseService {
             		direction,
             		futuresOrder.getLeverRate(),
             		futuresOrder.getOffset(),
-            		futuresOrder.getOrderPriceType(),
+            		HuobiAdapters.getOrderPriceType(futuresOrder.getOrderPriceType()),
             		futuresOrder.getPrice(),
             		futuresOrder.getOriginalAmount(),
             		Long.valueOf(futuresOrder.getUserReference())

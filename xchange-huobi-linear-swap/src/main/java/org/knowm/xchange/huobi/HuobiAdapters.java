@@ -441,5 +441,17 @@ public class HuobiAdapters {
 
 		return openPositions;
 	}
+	
+	  public static String getOrderPriceType(String orderPriceType) {
+		  
+		  if(orderPriceType.equals("LIMIT_MARKER")) {
+			  return "post_only";
+		  }else if(orderPriceType.equals("LIMIT")) {
+			  return "limit";
+		  }
+		  
+		  return null;
+		  
+	  }
 
 }
