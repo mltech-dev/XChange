@@ -176,14 +176,4 @@ public class HuobiTradeServiceRaw extends HuobiBaseService {
               HuobiUtils.createUTCDate(exchange.getNonceFactory()),
               signatureCreator))[0];
   }
-  
-  
-  public static void main(String[] args) {
-//	  
-//	  private boolean isIntegerValue(BigDecimal bd) {
-	  
-	  BigDecimal bd = new BigDecimal("2342435.00000");
-	  System.out.println(bd.signum() == 0 || bd.scale() <= 0 || bd.stripTrailingZeros().scale() <= 0);
-//		}
-  }
 }
