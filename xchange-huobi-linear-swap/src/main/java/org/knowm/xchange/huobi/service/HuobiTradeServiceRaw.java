@@ -139,7 +139,14 @@ public class HuobiTradeServiceRaw extends HuobiBaseService {
     } else {
       throw new ExchangeException("Unsupported order direction.");
     }
-
+    
+    Long volumn = 0L;
+    if(futuresOrder.getOriginalAmount().signum() == 0 || futuresOrder.getOriginalAmount().scale() <= 0 || futuresOrder.getOriginalAmount().stripTrailingZeros().scale() <= 0) {
+    	volumn = futuresOrder.getOriginalAmount().longValue();
+    }else {
+    	 throw new ExchangeException("The volume field is invalid. Please re-enter.");
+    }
+    
     HuobiOrderResult result =
         huobi.placeSwapOrder(
             new HuobiCreateOrderRequest(futuresOrder.getContractCode(),
@@ -148,7 +155,7 @@ public class HuobiTradeServiceRaw extends HuobiBaseService {
             		futuresOrder.getOffset(),
             		HuobiAdapters.getOrderPriceType(futuresOrder.getOrderPriceType()),
             		futuresOrder.getPrice(),
-            		futuresOrder.getOriginalAmount(),
+            		volumn,
             		Long.valueOf(futuresOrder.getUserReference())
             		),
             exchange.getExchangeSpecification().getApiKey(),

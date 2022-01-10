@@ -30,13 +30,13 @@ public class HuobiCreateOrderRequest {
 	String symbol;
 	
 	@JsonProperty("volume")
-	BigDecimal volume;
+	Long volume;
 	
 	@JsonProperty("client_order_id")
 	long clientOrderId;
 
 	public HuobiCreateOrderRequest(String contractCode, String contractType, String direction, int leverRate,
-			String offset, String orderPriceType, BigDecimal price, String symbol, BigDecimal volume,long clientOrderId) {
+			String offset, String orderPriceType, BigDecimal price, String symbol, Long volume,long clientOrderId) {
 		super();
 		this.contractCode = contractCode;
 		this.contractType = contractType;
@@ -114,11 +114,21 @@ public class HuobiCreateOrderRequest {
 		this.symbol = symbol;
 	}
 
-	public BigDecimal getVolume() {
+	public Long getVolume() {
 		return volume;
 	}
 
-	public void setVolume(BigDecimal volume) {
+	public void setVolume(Long volume) {
 		this.volume = volume;
 	}
+
+	public long getClientOrderId() {
+		return clientOrderId;
+	}
+
+	public void setClientOrderId(long clientOrderId) {
+		this.clientOrderId = clientOrderId;
+	}
+
+
 }
