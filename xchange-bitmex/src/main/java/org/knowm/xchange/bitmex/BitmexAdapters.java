@@ -111,7 +111,8 @@ public class BitmexAdapters {
         rawOrder.getAvgPx(),
         rawOrder.getCumQty(),
         null,
-        BitmexAdapters.adaptOrderStatus(rawOrder.getOrderStatus()));
+        BitmexAdapters.adaptOrderStatus(rawOrder.getOrderStatus()),
+        rawOrder.getClOrdID());
   }
 
   public static Ticker adaptTicker(BitmexTicker bitmexTicker, CurrencyPair currencyPair) {
@@ -204,7 +205,8 @@ public class BitmexAdapters {
         orderDescription.getPrice(),
         filledAmount,
         bitmexOrder.getFee(),
-        status);
+        status,
+        bitmexOrder.getUserRefId());
   }
 
   public static OrderType adaptOrderType(BitmexSide bitmexType) {
