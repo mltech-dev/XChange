@@ -14,7 +14,9 @@ import org.knowm.xchange.dto.Order.OrderStatus;
 import org.knowm.xchange.dto.Order.OrderType;
 import org.knowm.xchange.dto.account.Balance;
 import org.knowm.xchange.dto.account.FundingRecord;
+import org.knowm.xchange.dto.account.OpenPosition;
 import org.knowm.xchange.dto.account.Wallet;
+import org.knowm.xchange.dto.account.OpenPosition.Type;
 import org.knowm.xchange.dto.marketdata.OrderBook;
 import org.knowm.xchange.dto.marketdata.Ticker;
 import org.knowm.xchange.dto.marketdata.Trade;
@@ -30,6 +32,10 @@ public class BitmexAdapters {
 
   private static final BigDecimal SATOSHIS_BY_BTC = BigDecimal.valueOf(100_000_000L);
 
+  public static OpenPosition adaptPosition(BitmexPosition position) {
+	  return new OpenPosition(adaptSymbolToCurrencyPair(position.getSymbol()), Type.BOTH, position.getCurrentQty(), position.getMarkPrice());
+  }
+  
   public static OrderBook adaptOrderBook(BitmexDepth bitmexDepth, CurrencyPair currencyPair) {
 
     OrdersContainer asksOrdersContainer =
