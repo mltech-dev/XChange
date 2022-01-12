@@ -17,6 +17,7 @@ import org.knowm.xchange.bitmex.dto.trade.BitmexPlaceOrderParameters;
 import org.knowm.xchange.bitmex.dto.trade.BitmexPlaceOrderParameters.Builder;
 import org.knowm.xchange.bitmex.dto.trade.BitmexReplaceOrderParameters;
 import org.knowm.xchange.dto.Order;
+import org.knowm.xchange.dto.account.OpenPositions;
 import org.knowm.xchange.dto.marketdata.Trades.TradeSortType;
 import org.knowm.xchange.dto.trade.LimitOrder;
 import org.knowm.xchange.dto.trade.MarketOrder;
@@ -51,6 +52,13 @@ public class BitmexTradeService extends BitmexTradeServiceRaw implements TradeSe
     return new DefaultOpenOrdersParam();
   }
 
+  @Override
+	public OpenPositions getOpenPositions() throws IOException {
+	  return new OpenPositions(
+			  getBitmexPositions().stream().map(BitmexAdapters::adaptPosition).collect(Collectors.toList())
+	  );
+	}
+  
   @Override
   public OpenOrders getOpenOrders() throws ExchangeException {
 
