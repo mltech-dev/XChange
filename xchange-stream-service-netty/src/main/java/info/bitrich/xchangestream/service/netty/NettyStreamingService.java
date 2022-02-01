@@ -62,9 +62,9 @@ public abstract class NettyStreamingService<T> extends ConnectableService {
 
   protected class Subscription {
 
-    final ObservableEmitter<T> emitter;
-    final String channelName;
-    final Object[] args;
+	public final ObservableEmitter<T> emitter;
+    public final String channelName;
+    public final Object[] args;
 
     public Subscription(ObservableEmitter<T> emitter, String channelName, Object[] args) {
       this.emitter = emitter;
