@@ -51,7 +51,7 @@ public class BitmexOrder {
    */
   public BitmexOrder(
       @JsonProperty("refid") String refId,
-      @JsonProperty("userref") String userRefId,
+      @JsonProperty("clOrdID") String userRefId,
       @JsonProperty("status") BitmexOrderStatus status,
       @JsonProperty("opentm") double openTimestamp,
       @JsonProperty("starttm") double startTimestamp,
