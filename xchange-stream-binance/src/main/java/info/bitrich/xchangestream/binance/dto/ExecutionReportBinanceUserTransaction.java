@@ -197,6 +197,7 @@ public class ExecutionReportBinanceUserTransaction extends ProductBinanceWebSock
         .orderId(Long.toString(orderId))
         .feeAmount(commissionAmount)
         .feeCurrency(Currency.getInstance(commissionAsset))
+        .orderUserReference(clientOrderId)
         .build();
   }
 
@@ -216,7 +217,7 @@ public class ExecutionReportBinanceUserTransaction extends ProductBinanceWebSock
             side,
             stopPrice,
             BigDecimal.ZERO,
-            timestamp));
+            getEventTime().getTime()));
   }
 
   @Override
