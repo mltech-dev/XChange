@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.knowm.xchange</groupId>
 		<artifactId>xchange-parent</artifactId>
-		<version>5.0.13-SNAPSHOT</version>
+		<version>5.0.14-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>xchange-examples</artifactId>
@@ -140,6 +140,12 @@
 			<artifactId>xchange-coinbene</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- XChange Coincheck support -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>xchange-coincheck</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!-- XChange CoinEgg support -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -236,7 +242,7 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>xchange-okex</artifactId>
 			<version>${project.version}</version>
-		</dependency>		
+		</dependency>
 		<!-- XChange Bleutrade exchange support -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>

@@ -1,28 +1,42 @@
 package org.knowm.xchange.okex.v5;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import org.knowm.xchange.currency.Currency;
-import org.knowm.xchange.okex.v5.dto.OkexException;
-import org.knowm.xchange.okex.v5.dto.OkexResponse;
-import org.knowm.xchange.okex.v5.dto.account.*;
-import org.knowm.xchange.okex.v5.dto.marketdata.OkexCurrency;
-import org.knowm.xchange.okex.v5.dto.subaccount.OkexSubAccountDetails;
-import org.knowm.xchange.okex.v5.dto.trade.*;
-import si.mazi.rescu.ParamsDigest;
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+import org.knowm.xchange.currency.Currency;
+import org.knowm.xchange.okex.v5.dto.OkexException;
+import org.knowm.xchange.okex.v5.dto.OkexResponse;
+import org.knowm.xchange.okex.v5.dto.account.*;
+import org.knowm.xchange.okex.v5.dto.account.OkexAssetBalance;
+import org.knowm.xchange.okex.v5.dto.account.OkexDepositAddress;
+import org.knowm.xchange.okex.v5.dto.account.OkexTradeFee;
+import org.knowm.xchange.okex.v5.dto.account.OkexWalletBalance;
+import org.knowm.xchange.okex.v5.dto.account.PiggyBalance;
+import org.knowm.xchange.okex.v5.dto.marketdata.OkexCurrency;
+import org.knowm.xchange.okex.v5.dto.subaccount.OkexSubAccountDetails;
+import org.knowm.xchange.okex.v5.dto.trade.OkexAmendOrderRequest;
+import org.knowm.xchange.okex.v5.dto.trade.OkexCancelOrderRequest;
+import org.knowm.xchange.okex.v5.dto.trade.OkexOrderDetails;
+import org.knowm.xchange.okex.v5.dto.trade.OkexOrderRequest;
+import org.knowm.xchange.okex.v5.dto.trade.OkexOrderResponse;
+import si.mazi.rescu.ParamsDigest;
 
 @Path("/api/v5")
 @Produces(MediaType.APPLICATION_JSON)
 public interface OkexAuthenticated extends Okex {
   String balancePath = "/account/balance"; // Stated as 10 req/2 sec
   String tradeFeePath = "/account/trade-fee"; // Stated as 5 req/2 sec
+  String configPath = "/account/config"; // Stated as 5 req/2 sec
   String currenciesPath = "/asset/currencies"; // Stated as 6 req/sec
   String assetBalancesPath = "/asset/balances"; // Stated as 6 req/sec
   String pendingOrdersPath = "/trade/orders-pending"; // Stated as 20 req/2 sec
@@ -57,6 +71,7 @@ public interface OkexAuthenticated extends Okex {
           put(depositAddressPath, Arrays.asList(6, 1));
           put(ordersHistoryPath, Arrays.asList(40, 2));
           put(tradeFeePath, Arrays.asList(5, 2));
+          put(configPath, Arrays.asList(5, 2));
           put(subAccountList, Arrays.asList(2, 2));
           put(subAccountBalance, Arrays.asList(2, 2));
           put(piggyBalance, Arrays.asList(6, 1));
@@ -75,6 +90,16 @@ public interface OkexAuthenticated extends Okex {
       @HeaderParam("OK-ACCESS-TIMESTAMP") String timestamp,
       @HeaderParam("OK-ACCESS-PASSPHRASE") String passphrase,
       @HeaderParam("X-SIMULATED-TRADING") String simulatedTrading);
+
+  @GET
+  @Path(configPath)
+  OkexResponse<List<OkexAccountConfig>> getAccountConfiguration(
+          @HeaderParam("OK-ACCESS-KEY") String apiKey,
+          @HeaderParam("OK-ACCESS-SIGN") ParamsDigest signature,
+          @HeaderParam("OK-ACCESS-TIMESTAMP") String timestamp,
+          @HeaderParam("OK-ACCESS-PASSPHRASE") String passphrase,
+          @HeaderParam("X-SIMULATED-TRADING") String simulatedTrading)
+          throws OkexException, IOException;
 
   @GET
   @Path(ordersHistoryPath)
