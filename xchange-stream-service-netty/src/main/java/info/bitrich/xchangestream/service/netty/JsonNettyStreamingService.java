@@ -36,11 +36,16 @@ public abstract class JsonNettyStreamingService extends NettyStreamingService<Js
   @Override
   public void messageHandler(String message) {
     LOG.debug("Received message: {}", message);
-    JsonNode jsonNode;
+    JsonNode jsonNode=null;
 
     // Parse incoming message to JSON
     try {
-      jsonNode = objectMapper.readTree(message);
+    	if(message.contains("pong")) {
+    		String data = "{\"action\":\""+message+"\",\"table\":\"ping\"}";  
+    		jsonNode = objectMapper.readTree(data);
+    	}else {
+    		jsonNode = objectMapper.readTree(message);
+    	}
     } catch (IOException e) {
       LOG.error("Error parsing incoming message to JSON: {}", message);
       return;

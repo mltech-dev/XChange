@@ -9,7 +9,7 @@
 
   <groupId>org.knowm.xchange</groupId>
   <artifactId>xchange-parent</artifactId>
-  <version>5.0.13-SNAPSHOT</version>
+  <version>5.0.14-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>XChange</name>
@@ -33,17 +33,17 @@
     <version.java>1.8</version.java>
     <version.assertj>3.22.0</version.assertj>
     <version.commons.lang3>3.12.0</version.commons.lang3>
-    <version.fasterxml>2.13.1</version.fasterxml>
+    <version.fasterxml>2.13.2</version.fasterxml>
     <version.github.mmazi>2.1.0</version.github.mmazi>
     <version.resilience4j>1.7.0</version.resilience4j>
     <version.junit>4.13.2</version.junit>
     <version.lombok>1.18.22</version.lombok>
     <version.knowm.xchart>3.8.1</version.knowm.xchart>
-    <version.qos.logback>1.2.10</version.qos.logback>
+    <version.qos.logback>1.2.11</version.qos.logback>
     <version.reflections>0.10.2</version.reflections>
-    <version.slf4j>1.7.32</version.slf4j>
+    <version.slf4j>1.7.36</version.slf4j>
     <version.crypto>5.0.0</version.crypto>
-    <version.java-jwt>3.18.2</version.java-jwt>
+    <version.java-jwt>3.18.3</version.java-jwt>
 
     <skipIntegrationTests>true</skipIntegrationTests>
   </properties>
@@ -137,6 +137,7 @@
     <module>xchange-cobinhood</module>
     <module>xchange-coinbase</module>
     <module>xchange-coinbasepro</module>
+    <module>xchange-coincheck</module>
     <module>xchange-coindeal</module>
     <module>xchange-coindirect</module>
     <module>xchange-coinbene</module>
@@ -248,6 +249,9 @@
     <module>xchange-stream-service-core</module>
     <module>xchange-stream-service-netty</module>
     <module>xchange-stream-service-pubnub</module>
+	<!--
+    <module>xchange-stream-coincheck</module>
+	-->
   </modules>
 
   <!--
@@ -337,7 +341,7 @@
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
-        <version>31.0.1-jre</version>
+        <version>31.1-jre</version>
       </dependency>
 
       <dependency>
@@ -360,12 +364,15 @@
         <artifactId>logback-classic</artifactId>
         <version>${version.qos.logback}</version>
       </dependency>
+
+      <!-- Lombok for boilerplate -->
       <dependency>
         <groupId>org.projectlombok</groupId>
         <artifactId>lombok</artifactId>
         <version>${version.lombok}</version>
         <scope>provided</scope>
       </dependency>
+
       <!-- jwt for auth -->
       <dependency>
         <groupId>com.auth0</groupId>
@@ -388,7 +395,7 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.1.72.Final</version>
+            <version>4.1.75.Final</version>
         </dependency>
 
     </dependencies>
@@ -486,7 +493,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
-            <version>3.3.1</version>
+            <version>3.3.2</version>
             <executions>
               <execution>
                 <id>attach-javadocs</id>
@@ -512,7 +519,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
+        <version>3.10.1</version>
         <configuration>
           <source>${version.java}</source>
           <target>${version.java}</target>
@@ -546,7 +553,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.3.1</version>
+        <version>3.3.2</version>
         <executions>
           <execution>
             <id>attach-javadocs</id>

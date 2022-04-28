@@ -51,6 +51,7 @@ public class ExecutionReportBinanceUserTransaction extends ProductBinanceWebSock
       @JsonProperty("E") String eventTime,
       @JsonProperty("s") String symbol,
       @JsonProperty("c") String clientOrderId,
+      @JsonProperty("C") String origClientOrderId,
       @JsonProperty("S") String side,
       @JsonProperty("o") String orderType,
       @JsonProperty("f") String timeInForce,
@@ -73,7 +74,6 @@ public class ExecutionReportBinanceUserTransaction extends ProductBinanceWebSock
       @JsonProperty("m") boolean buyerMarketMaker,
       @JsonProperty("Z") BigDecimal cumulativeQuoteAssetTransactedQuantity) {
     super(eventType, eventTime, symbol);
-    this.clientOrderId = clientOrderId;
     this.side = OrderSide.valueOf(side);
     this.orderType = OrderType.valueOf(orderType);
     this.timeInForce = TimeInForce.valueOf(timeInForce);
@@ -83,6 +83,11 @@ public class ExecutionReportBinanceUserTransaction extends ProductBinanceWebSock
     this.icebergQuantity = icebergQuantity;
     this.executionType = ExecutionType.valueOf(currentExecutionType);
     this.currentOrderStatus = OrderStatus.valueOf(currentOrderStatus);
+    if(this.currentOrderStatus.equals(OrderStatus.CANCELED)) {
+    	this.clientOrderId = origClientOrderId;	
+    } else {
+    	this.clientOrderId = clientOrderId;
+    }
     this.orderRejectReason = orderRejectReason;
     this.orderId = orderId;
     this.lastExecutedQuantity = lastExecutedQuantity;
@@ -197,6 +202,7 @@ public class ExecutionReportBinanceUserTransaction extends ProductBinanceWebSock
         .orderId(Long.toString(orderId))
         .feeAmount(commissionAmount)
         .feeCurrency(Currency.getInstance(commissionAsset))
+        .orderUserReference(clientOrderId)
         .build();
   }
 
@@ -216,7 +222,7 @@ public class ExecutionReportBinanceUserTransaction extends ProductBinanceWebSock
             side,
             stopPrice,
             BigDecimal.ZERO,
-            timestamp));
+            getEventTime().getTime()));
   }
 
   @Override

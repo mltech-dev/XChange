@@ -39,6 +39,7 @@ import org.knowm.xchange.service.trade.params.TradeHistoryParamsSorted;
 import org.knowm.xchange.service.trade.params.TradeHistoryParamsTimeSpan;
 import org.knowm.xchange.service.trade.params.orders.DefaultOpenOrdersParam;
 import org.knowm.xchange.service.trade.params.orders.OpenOrdersParams;
+import org.knowm.xchange.service.trade.params.orders.OrderQueryParams;
 
 public class BitmexTradeService extends BitmexTradeServiceRaw implements TradeService {
 
@@ -162,7 +163,8 @@ public class BitmexTradeService extends BitmexTradeServiceRaw implements TradeSe
   }
 
   @Override
-  public Collection<Order> getOrder(String... orderIds) throws ExchangeException {
+  public Collection<Order> getOrder(OrderQueryParams... orderQueryParams) throws IOException {
+    String[] orderIds = TradeService.toOrderIds(orderQueryParams);
 
     String filter = "{\"orderID\": [\"" + String.join("\",\"", orderIds) + "\"]}";
 

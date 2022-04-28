@@ -41,6 +41,7 @@ public class BitmexStreamingExchange extends BitmexExchange implements Streaming
     BitmexStreamingService streamingService =
         new BitmexStreamingService(uri, exchangeSpec.getApiKey(), exchangeSpec.getSecretKey());
     applyStreamingSpecification(exchangeSpec, streamingService);
+    
     return streamingService;
   }
 
@@ -107,4 +108,10 @@ public class BitmexStreamingExchange extends BitmexExchange implements Streaming
   public BitmexStreamingService getStreamingService() {
     return streamingService;
   }
+  
+  
+  public void sendPingMessage() {
+	  streamingService.sendPing();
+  }
+  
 }
